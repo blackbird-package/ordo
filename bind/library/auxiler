@@ -74,7 +74,7 @@ for module in "${LIBRARY[@]}"; do
 
         source "$BPAT/bind/library/$module"
     else
-        blackbird_info "$module is missing or misconfigured"
+        blackbird_error "$module is missing or misconfigured"
     fi
     
 done
