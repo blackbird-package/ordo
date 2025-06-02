@@ -90,7 +90,7 @@ function blackbird_installs_module_flat() {
 
     for flatapp in "${FLATPACK[@]}"; do
         blackbird_progress "install $flatapp"
-        rootc "/usr/bin/flatpak install --system $flatapp --nointeractive"
+        rootc "/usr/bin/flatpak install --system --noninteractive $flatapp"
         blackbird_done
     done
 
