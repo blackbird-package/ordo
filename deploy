@@ -2,18 +2,19 @@
 
 ## load library
 export BBPROFILE=$2
+export BPAT="/ordo"
 
 if [[ $1 == "install" ]];then
-    source "$(pwd)/bind/make";
+    source "$BPAT/bind/make";
     blackbird_install
 fi
 
 if [[ $1 == "rebase" ]];then
-    source "$(pwd)/bind/base";
+    source "$BPAT/bind/base";
     blackbird_rebased
 fi
 
 if [[ $1 == "reset" ]];then
-    source "$(pwd)/bind/reset";
+    source "$BPAT/bind/reset";
     blackbird_recover
 fi

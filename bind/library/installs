@@ -33,6 +33,18 @@ function blackbird_regpack_flat() {
 }
 
 
+##
+## CHROOT WRAP
+
+function userc() {
+    arch-chroot /mnt /bin/bash -c 'sudo -H -u installman /bin/bash -c "'$1'"' 
+}
+
+
+function rootc() {
+    arch-chroot /mnt /bin/bash -c $1
+}
+
 
 
 ## 
@@ -53,15 +65,21 @@ function blackbird_package_install_module_aurs() {
 
 function blackbird_package_install_module_core() {
 
-    echo ""
-    echo ${COREPACK[*]}
+
+    for coreapp in "${COREPACK[@]}"; do
+        rootc "git clone https://aur.archlinux.org/$coreapp /tmp/"
+        rootc "/bin/bash /tmp/$coreapp/make"
+    done
 }
 
 
 function blackbird_package_install_module_flat() {
    
-    echo ""
-    echo ${FLATPACK[*]}
+    for flatapp in "${FLATPACK[@]}"; do
+
+        
+
+    done
 }
 
 

@@ -8,11 +8,19 @@
 
 
 ## load library
-BPAT=$(pwd)
+BPAT=/ordo
 source "$BPAT/bind/library/auxiler";
 
 
 function blackbird_rebased() {
-    echo 'proses rebase'
+
+    clear
+    echo 'starting recovery procedure ...'
+    sleep 1
+    blackbird_unpacks_prepare_main
+    blackbird_systems_prepare_main
+    blackbird_storage_prepare_base
+    blackbird_systems_install_reco
+
 }
 

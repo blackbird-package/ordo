@@ -64,19 +64,6 @@ function blackbird_done() {
 
 
 ##
-## CHROOT WRAP
-
-function userc() {
-     arch-chroot /mnt /bin/bash -c 'sudo -H -u installman /bin/bash -c "'$1'"' 
-}
-
-
-function rootc() {
-    arch-chroot /mnt /bin/bash -c $1
-}
-
-
-##
 ## MAIN FUNCTIONS
 
 LIBRARY=("installs" "unpack" "system" "")
