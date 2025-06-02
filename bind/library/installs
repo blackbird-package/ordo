@@ -64,10 +64,12 @@ function blackbird_installs_module_yays() {
 
 function blackbird_installs_module_aurs() {
 
-    userc "git clone https://aur.archlinux.org/yay /home/installman/yay"
-    userc "makepkg -sric --dir /home/installman/yay --noconfirm"
-  
-    echo ${AURSPACK[*]}
+    if [[ ! -d /mnt/home/installman/yay ]];then
+        userc "git clone https://aur.archlinux.org/yay /home/installman/yay"
+        userc "makepkg -sric --dir /home/installman/yay --noconfirm"
+    fi
+    
+    userc "yay -S ${AURSPACK[*]} --noconfirm"
 }
 
 
