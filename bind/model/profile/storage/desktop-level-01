@@ -204,22 +204,22 @@ function blackbird_storage_prepare_partio_base() {
 
 
     blackbird_progress "create boot partition"
-    parted $PART_BOOT --script mklabel gpt mkpart "boot" fat32 1MiB 321MiB
+    parted $DISK_INIT --script mklabel gpt mkpart "boot" fat32 1MiB 321MiB
     blackbird_done
 
 
     blackbird_progress "create keys partition"
-    parted $PART_KEYS --script mkpart "keys" ext4 321MiB 901MiB
+    parted $DISK_INIT --script mkpart "keys" ext4 321MiB 901MiB
     blackbird_done
 
 
     blackbird_progress "create root partition"
-    #parted $PART_ROOT --script mkpart "proc" ext4 901MiB 52290MiB
+    parted $DISK_INIT --script mkpart "proc" ext4 901MiB 52290MiB
     blackbird_done
 
 
     blackbird_progress "create data partition"
-    #parted $PART_DATA --script mkpart "data" ext4 62290MiB 100%
+    parted $DISK_INIT --script mkpart "data" ext4 62290MiB 100%
     blackbird_done   
 }
 
