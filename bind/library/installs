@@ -73,6 +73,7 @@ function blackbird_installs_module_core() {
         fi
 
         rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
+        rootc "chmod +x /opt/cache/$coreapp"
         rootc "/opt/cache/$coreapp/make"
     done
     blackbird_scope_done
