@@ -199,7 +199,7 @@ function blackbird_storage_prepare_partio_base() {
 
     
     blackbird_progress "wipe installation drive"
-    parted $DISK_INIT
+    sfdisk --delete $DISK_INIT
     blackbird_done
 
 
