@@ -427,7 +427,6 @@ function blackbird_storage_sysroot_volume_make() {
 
 function blackbird_storage_sysroot_volume_reco() {
 
-    echo "debug"
     yes | mkfs.ext4 -b 4096 /dev/proc/root
     mount /dev/proc/root /mnt
 }
@@ -490,7 +489,7 @@ function blackbird_storage_sysubin_volume_reco() {
 function blackbird_storage_sysopts_volume_base() {
     
     lvcreate -L $SIZE_OPTS proc -n opts
-    blackbird_storage_sysopts_volume_base
+    blackbird_storage_sysopts_volume_reco
 }
 
 
@@ -506,6 +505,7 @@ function blackbird_storage_sysopts_volume_reco() {
     fi
 
     yes | mkfs.ext4 -b 4096 /dev/proc/opts
+
     mount -o defaults,rw,nosuid,nodev,relatime /dev/proc/opts /mnt/opt
 
     if [[ -d /mnt/opt/flat ]];then
@@ -528,7 +528,7 @@ function blackbird_storage_sysopts_volume_reco() {
 function blackbird_storage_sysvars_volume_base() {
     
     lvcreate -L $SIZE_VARS proc -n vars
-    blackbird_storage_sysvars_volume_repo
+    blackbird_storage_sysvars_volume_reco
 }
 
 
@@ -581,7 +581,7 @@ function blackbird_storage_sysvtmp_volume_reco() {
 function blackbird_storage_sysvlog_volume_base() {
     
     lvcreate -L $SIZE_VLOG proc -n vlog
-    blackbird_storage_logic_procvaud
+    blackbird_storage_sysvlog_volume_reco
 }
 
 
@@ -840,7 +840,7 @@ function blackbird_storage_datsrvc_volume_base() {
 
     lvcreate -L $SIZE_SRVS data -n srvc
     yes | mkfs.ext4 -b 4096 /dev/data/srvc
-    blackbird_storage_datsrvc_volume_base
+    blackbird_storage_datsrvc_volume_reco
 }
 
 
