@@ -1,0 +1,24 @@
+#!/bin/bash
+
+## SECURITY PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER PACKAGE
+
+# firewall
+blackbird_regpack_main "firewalld nftables"
+
+
+# nbde
+blackbird_regpack_main "tang"
+
+
+# password
+blackbird_regpack_main "libpwquality polkit"
+
+
+# security enhance
+blackbird_regpack_main "apparmor"

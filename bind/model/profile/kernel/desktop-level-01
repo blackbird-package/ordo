@@ -1,0 +1,118 @@
+#!/bin/bash
+
+## LINUX KERNEL PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+
+## GLOBAL VARIABLE
+# kernel type
+SYSKERNL="linux-hardened"
+
+
+## 
+## REGISTER PACKAGE
+
+## kernel
+blackbird_regpack_main $SYSKERNL
+
+
+## initram
+blackbird_regpack_main "mkinitcpio"
+
+## firmware
+blackbird_regpack_main "linux-firmware"
+
+
+## extension
+blackbird_regpack_main "bubblewrap-suid"
+
+
+## 
+## BOOTCTL MODULE
+
+
+function blackbird_kernels_module_bootctl_base() {
+    blackbird_kernels_module_bootctl_reco
+    bootctl --path=/boot/ install 
+}
+
+
+function blackbird_kernels_module_bootctl_make() {
+    blackbird_kernels_module_bootctl_base
+}
+
+
+function blackbird_kernels_module_bootctl_reco() {
+
+    if [[ $SYSPROCS == 'intel' ]];then
+        mv /boot/amd-ucode.img /boot/vmlinuz-$SYSKERNL /boot/kernel
+    fi
+
+    if [[ $SYSPROCS == 'amd' ]];then
+        mv /boot/amd-ucode.img /boot/vmlinuz-$SYSKERNL /boot/kernel
+    fi
+
+    if [[ -f /boot/initramfs-* ]];then
+         rm /boot/initramfs-*
+    fi
+}
+
+
+## 
+## MKINITCPIO MODULE
+
+function blackbird_kernel_module_initrams_make() {
+
+    RAMFSHOK=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt lvm2 block filesystems fsck)
+
+    mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.d/blackbird.conf
+    rm -fr /mnt/etc/mkinitcpio.conf.d/
+
+    echo '# Blackbird Configuration' >  /mnt/etc/mkinitcpio.d/blackbird.conf
+    echo "MODULES=(${RAMFSMOD[*]})"  >> /mnt/etc/mkinitcpio.d/blackbird.conf
+    echo "BINARIES=(${RAMFSBIN[*]})" >> /mnt/etc/mkinitcpio.d/blackbird.conf
+    echo "FILES=(${RAMFSFIL[*]})"    >> /mnt/etc/mkinitcpio.d/blackbird.conf
+    echo "HOOKS=(${RAMFSHOK[*]})"    >> /mnt/etc/mkinitcpio.d/blackbird.conf
+
+    echo '# Blackbird Preset'                             >  /mnt/etc/mkinitcpio.d/linux-hardened.preset
+    echo 'ALL_config="/etc/mkinitcpio.d/blackbird.conf"'  >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
+    echo 'ALL_kver="/boot/kernel/vmlinuz-linux-hardened"' >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
+    echo 'PRESETS=("default")'                            >> /mnt/etc/mkinitcpio.d/linux-hardened.preset  
+    echo 'default_uki="/boot/efi/linux/blackbird.efi"'    >> /mnt/etc/mkinitcpio.d/linux-hardened.preset
+}
+
+
+function blackbird_kernels_module_cmdline_main() {
+
+    mkdir /mnt/etc/cmdline.d
+    touch /mnt/etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-misc.conf}
+
+
+    ## kernel parameter
+    KERNBOOT="cryptdevice=UUID=$(blkid -s UUID -o value $PART_PROC):crypto root=/dev/proc/root"
+
+    echo $KERNBOOT      > /mnt/etc/cmdline.d/01-boot.conf 
+    echo ${KERNMODS[*]} > /mnt/etc/cmdline.d/02-mods.conf
+    echo ${KERNSECS[*]} > /mnt/etc/cmdline.d/03-secs.conf
+    echo ${KERNPERF[*]} > /mnt/etc/cmdline.d/04-perf.conf
+    echo ${KERNMISC[*]} > /mnt/etc/cmdline.d/05-misc.conf
+
+
+    ## cryptaab param
+    echo "data UUID=$(blkid -s UUID -o value $PART_DATA) none" >> /mnt/etc/crypttab
+}
+
+
+##
+## MAIN FUNCTION
+
+function blackbird_kernels_prepare_reco() {
+
+    blackbird_scope_init "Install Blackbird Kernel Protocol"
+    blackbird_kernels_module_cmdline_main
+    blackbird_kernel_module_initrams_make
+    blackbird_kernels_module_bootctl_reco
+    blackbird_scope_done
+}

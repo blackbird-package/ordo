@@ -1,0 +1,94 @@
+#!/bin/bash
+
+## SECURITY PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER PACKAGE
+
+# firewall
+blackbird_regpack_main "firewalld nftables"
+
+
+# nbde
+blackbird_regpack_main "tang"
+
+
+# password
+blackbird_regpack_main "libpwquality libpam-google-authenticator qrencode polkit"
+
+
+# security enhance
+blackbird_regpack_main "apparmor"
+blackbird_regramf_secs "lsm=landlock,lockdown,yama,integrity,apparmor,bpf"
+
+
+
+##
+## NETWORK MODULE
+
+# blacklist filesystem
+function blackbird_secured_module_modprobe_filesys() {
+
+    filesysmods=("cramfs" "hfs" "hfsplus" "jffs2" "squashfs" "udf" "usb-storage" "9p" "affs" "afs" "ceph" "fuse")
+    policypaths="/mnt/etc/modprobe.d/blackbird-filesystem-protocol.conf"
+    
+    if [[ ! -e $policypaths ]];then
+        touch $policypaths
+    fi
+
+    for blfs in "${filesysmods[@]}"; do
+        echo "install $blfs /bin/false" >> $policypaths
+        echo "blacklist $blfs"          >> $policypaths
+        echo ""
+        echo ""
+    done
+}
+
+
+function blackbird_secured_module_modprobe_network() {
+
+    networkmods=("cramfs" "hfs" "hfsplus" "jffs2" "squashfs" "udf" "usb-storage" "9p" "affs" "afs" "ceph" "fuse")
+    policypaths="/mnt/etc/modprobe.d/blackbird-network-protocol.conf"
+    
+    if [[ ! -e $policypaths ]];then
+        touch $policypaths
+    fi
+
+    for pnet in "${networkmods[@]}"; do
+        echo "install $pnet /bin/false" >> $policypaths
+        echo "blacklist $pnet"          >> $policypaths
+        echo ""
+        echo ""
+    done
+}
+
+
+function blackbird_secured_module_firewall_network()  {
+    systemctl enable firewalld 
+}
+
+
+function blackbird_secured_module_apparmor_ehanced()  {
+    systemctl enable firewalld 
+}
+
+
+function blackbird_secured_module_tanserve_network()  {
+    systemctl enable tangd.socket
+}
+
+
+## 
+## MAIN FUNCTION
+function blackbird_secured_prepare_init() {
+    blackbird_scope_init "Install Blackbird Security Protocol"
+    blackbird_secured_module_modprobe_filesys
+    blackbird_secured_module_apparmor_ehanced
+    blackbird_secured_module_modprobe_network
+    blackbird_secured_module_firewall_network
+    blackbird_secured_module_tanserve_network
+    blackbird_scope_done
+}

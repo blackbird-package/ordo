@@ -1,0 +1,132 @@
+#!/bin/bash
+
+
+## HYPRLAND DESKTOP PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+
+##
+## REGISTER PACKAGE
+
+# hyprland
+blackbird_regpack_main "uwsm hyprland hyprpolkitagent hypridle hyprlock xdg-desktop-portal-hyprland qt5-wayland qt6-wayland ttf-droid wl-clipboard cliphist mailcap"
+blackbird_regpack_aurs "hyprshot"
+blackbird_regpack_core "hypr uwsm"
+
+
+# waybar
+blackbird_regpack_main "ttf-jetbrains-mono-nerd waybar"
+blackbird_regpack_core "waybar"
+
+# notification
+blackbird_regpack_main "mako"
+blackbird_regpack_core "mako"
+
+
+# dekstop menu
+
+# dekstop menu
+blackbird_regpack_main "wofi"
+blackbird_regpack_core "wofi"
+
+
+# dekstop manager
+blackbird_regpack_main "sddm"
+blackbird_regpack_core "login"
+
+
+# desktop theme
+blackbird_regpack_core "flow"
+
+
+# dekstop icons
+blackbird_regpack_core "eggs"
+
+
+# file manager
+blackbird_regpack_main "nautilus nautilus-image-converter seahorse-nautilus sushi"
+
+
+# productivity
+blackbird_regpack_main "gnome-calendar gnome-calculator homebank evolution"
+
+
+# password 
+blackbird_regpack_main "secrets seahorse"
+
+
+## os keyring
+blackbird_regpack_main "gnome-keyring libsecret"
+
+
+## utilities
+blackbird_regpack_main "mpc mpd xfmpc mpv kitty audacity"
+blackbird_regpack_core "mpd kitty"
+
+
+## browser
+blackbird_regpack_aurs "google-chrome"
+blackbird_regpack_flat "org.mozilla.firefox"
+
+
+## audio system
+blackbird_regpack_main "pipewire pipewire-pulse pipewire-jack wireplumber pavucontrol"
+
+
+## apps store
+blackbird_regpack_main "flatpak gnome-software"
+
+
+##
+## DEKSTOP CONFIG
+function blackbird_desktop_module_config_password() {
+    sudo ln -s /usr/lib/seahorse/ssh-askpass /usr/lib/ssh/ssh-askpass
+    systemctl --global enable gnome-keyring-daemon.socket
+    systemctl --global enable gcr-ssh-agent.socket
+}
+
+
+function blackbird_desktop_module_config_hyprland() {
+    
+    systemctl --global enable hypridle.service
+    systemctl --global enable hyprpolkitagent
+    systemctl --global enable waybar
+
+}
+
+
+function blackbird_desktop_module_config_wimanage() {
+    systemctl enable sddm
+}
+
+
+function blackbird_desktop_module_config_audiosys() {
+    systemctl --global enable pipewire-pulse
+}
+
+
+function blackbird_desktop_module_config_appstore() {
+    
+    mv -f /var/lib/flatpak/* /opt/flat
+    rm -r /var/lib/flatpak
+    ln -s /opt/flat /var/lib/flatpak
+
+    sudo flatpak override --filesystem=$HOME/.themes
+    sudo flatpak override --filesystem=$HOME/.icons
+    sudo flatpak override --env=GTK_THEME=theme
+    sudo flatpak override --env=GTK_ICONS=icon
+}
+
+
+##
+## MAIN FUNCTIONS
+function blackbird_desktop_prepare_init() {
+    blackbird_scope_init "Install Blackbird Hyprland Protocol"
+    blackbird_desktop_module_config_hyprland
+    blackbird_desktop_module_config_password
+    blackbird_desktop_module_config_wimanage
+    blackbird_desktop_module_config_audiosys
+    blackbird_scope_done
+}

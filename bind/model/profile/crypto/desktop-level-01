@@ -1,0 +1,15 @@
+#!/bin/bash
+
+## CRYPTOGRAPHY PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : Achmad Baihaqi
+
+
+##
+## STORAGE CRYPTOGRAPHY POLICY
+
+function blackbird_cryptos_prepare_init() {
+     blackbird_scope_init "Install Blackbird Cryptography Protocol"
+     echo 'debug protocol crypto'
+     blackbird_scope_done
+}

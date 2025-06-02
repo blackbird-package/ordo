@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+## USER PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+
+function blackbird_usercfg_prepare_init() {
+    blackbird_scope_init "Install Blackbird User Protocol"
+    echo 'debug protocol user'
+    blackbird_scope_done
+}

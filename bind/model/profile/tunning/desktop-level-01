@@ -1,0 +1,48 @@
+#!/bin/bash
+
+## TUNNING PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER PACKAGE
+
+## package manager
+blackbird_regpack_main "reflector"
+
+
+## power profile
+blackbird_regpack_main "tuned tuned-ppd"
+
+
+## procesor profile
+blackbird_regpack_main "irqbalance"
+
+
+## TUNNING MODULE
+
+function blackbird_tunning_module_package() {
+    cp /etc/pacman.d/mirrorlist /etc/pacman.d/backupmirror 
+}
+
+
+function blackbird_tunning_module_tunepow() {
+    systemctl enable tuned
+}
+
+
+function blackbird_tunning_module_irqbala() {
+    systemctl enable irqbalance.service
+}
+
+
+## 
+## MAIN FUNCTION
+function blackbird_tunning_prepare_init() {
+    blackbird_scope_init "Install Blackbird Performance Protocol"
+    blackbird_tunning_module_package
+    blackbird_tunning_module_tunepow
+    blackbird_tunning_module_irqbala
+    blackbird_scope_done
+}

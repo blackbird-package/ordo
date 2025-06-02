@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+UCODETYPE=$(echo $MAINPACK | grep "-ucode" )
+echo $UCODETYPE

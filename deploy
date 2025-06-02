@@ -1,0 +1,19 @@
+#!/bin/bash
+
+## load library
+export BBPROFILE=$2
+
+if [[ $1 == "install" ]];then
+    source "$(pwd)/bind/make";
+    blackbird_install
+fi
+
+if [[ $1 == "rebase" ]];then
+    source "$(pwd)/bind/base";
+    blackbird_rebased
+fi
+
+if [[ $1 == "reset" ]];then
+    source "$(pwd)/bind/reset";
+    blackbird_recover
+fi

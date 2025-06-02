@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+##
+## OPERASI INI DIGUNAKAN UNTUK INSTALL ULANG TANPA MERUBAH PARTISI YANG TELAH ADA 
+
+
+
+function blackbird_install() {
+    echo 'proses install'
+}

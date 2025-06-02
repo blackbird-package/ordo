@@ -1,0 +1,73 @@
+#!/bin/bash
+
+
+## CORESYSTEM PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER CORE
+
+## main
+blackbird_regpack_main "base base-devel"
+blackbird_regpack_core "sys-01"
+
+
+## util
+blackbird_regpack_main "less"
+
+
+## versioning
+blackbird_regpack_main "git"
+
+
+##
+## SYSTEM MODULE
+
+function blackbird_syscore_module_hostname() {
+    echo $DEVICE_HOSTNAME > /etc/hostname
+}
+
+
+function blackbird_syscore_module_timezone() {
+    ln -sf /usr/share/zoneinfo/$DEVICE_TIMEZONE /etc/localtime 
+    hwclock --systohc 
+    timedatectl set-ntp true 
+}
+
+
+function blackbird_syscore_module_hostlist() {
+
+    echo "127.0.0.1        localhost"                               >   /mnt/etc/hosts
+    echo "127.0.0.1        $DEVICE_LINKNAME"                        >>  /mnt/etc/hosts
+    echo "$NET_IPADDRES    $DEVICE_LINKNAME"                        >>  /mnt/etc/hosts
+    echo ""                                                         >>  /mnt/etc/hosts
+    echo ""                                                         >>  /mnt/etc/hosts
+    echo "::1              localhost ip6-localhost ip6-loopback"    >>  /mnt/etc/hosts
+    echo "ff02::1          ip6-allnodes"                            >>  /mnt/etc/hosts       
+    echo "ff02::2          ip6-allroutes"                           >>  /mnt/etc/hosts
+}
+
+
+function blackbird_syscore_module_gelocale() {
+       
+    echo $DEVICE_LOCALES1 >> /etc/locale.gen
+    echo $DEVICE_LOCALES2 >> /etc/locale.gen 
+    locale-gen  
+    locale > /etc/locale.conf 
+    sed -i '1s/.*/LANG='$DEVICE_LOCALES3'/' /etc/locale.conf 
+}
+
+
+## 
+## MAIN FUNCTION
+function blackbird_syscore_prepare_init() {
+
+    blackbird_scope_init "Install Blackbird Core System Protocol"
+    blackbird_syscore_module_hostname
+    blackbird_syscore_module_timezone
+    blackbird_syscore_module_hostlist
+    blackbird_syscore_module_gelocale
+    blackbird_scope_done
+}

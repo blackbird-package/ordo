@@ -1,0 +1,39 @@
+#!/bin/bash
+
+## VIRTUALIZATION SYSTEM PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : -
+
+
+
+##
+## REGISTER PACKAGE
+
+
+# qemu/kvm package
+blackbird_regpack_main "qemu-desktop"
+
+
+# qemu/kvm management
+blackbird_regpack_main "libvirt virt-manager"
+
+
+# qemu/kvm system  extension
+blackbird_regpack_main "openbsd-netcat"
+
+
+# qemu/kvm system register mkinitcpio module
+blackbird_regramf_mods "vfio_pci vfio vfio_iommu_type1"
+
+
+# qemu/kvm register module at kernel paramerter
+blackbird_regramf_mods "intel_iommu=on i915.fastboot=1"
+
+
+
+
+function blackbird_virtman_prepare_init() {
+   blackbird_scope_init "Install Blackbird KVM Protocol"
+   echo 'debug protocol kvm'
+   blackbird_scope_done
+}

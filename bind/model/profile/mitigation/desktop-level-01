@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+## MITIGATION PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER PACKAGE
+
+## backup 
+blackbird_regpack_main "rsync grsync"
+
+
+## integrity
+blackbird_regpack_core "aide"
+
+
+
+function blackbird_prevent_prepare_init() {
+    blackbird_scope_init "Install Blackbird Mitigation Protocol"
+    echo 'debug protocol mitigation'
+    blackbird_scope_done
+}

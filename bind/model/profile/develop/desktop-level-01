@@ -1,0 +1,38 @@
+#!/bin/bash
+
+## DEVELOPENT TOOLS PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+
+## 
+## REGISTER PACKAGE
+
+
+# neovim
+blackbird_regpack_main "neovim"
+
+
+# visual studio code
+blackbird_regpack_aurs "visual-studio-code-bin"
+
+
+##
+## DEVELOPMENT MODULE
+
+function blackbird_develop_module_config_vscode() {
+    sudo chown root:root /opt/visual-studio-code/chrome-sandbox
+    sudo chmod 4775 /opt/visual-studio-code/chrome-sandbox
+}
+
+
+
+
+##
+## MAIN FUNCTIOMN
+function blackbird_develop_prepare_init() {
+    blackbird_scope_init "Install Blackbird Development Protocol"
+    blackbird_develop_module_config_vscode
+    blackbird_scope_done
+}

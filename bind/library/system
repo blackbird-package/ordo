@@ -1,0 +1,207 @@
+#!/bin/bash
+
+## CORE SYSTEM PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+
+##
+## KERNEL MODULE
+RAMFSMOD=()
+RAMFSBIN=()
+RAMFSFIL=()
+KERNMODS=()
+KERNSECS=()
+KERNPERF=()
+KERNMISC=("rw" "quiet" )
+
+function blackbird_regramf_mods() {
+    RAMFSMOD+=($1)
+}
+
+
+function blackbird_regramf_bins() {
+    RAMFSBIN+=($1)
+}
+
+
+function blackbird_regramf_file() {
+    RAMFSFIL+=($1)
+}
+
+
+function blackbird_regramf_mods() {
+    KERNMODS+=($1)
+}
+
+
+function blackbird_regramf_secs() {
+    KERNSECS+=($1)
+}
+
+
+function blackbird_regramf_perf() {
+    KERNPERF+=($1)
+}
+
+function blackbird_regramf_misc() {
+    KERNMISC+=($1)
+}
+
+
+
+##
+## PROCESOR MODULE
+function blackbird_system_process_module() {
+
+    if [[ $SYSPROCS == "intel"  ]];then
+        blackbird_regpack_main "intel-ucode"
+
+    elif [[ $SYSPROCS == "amd"  ]];then
+        blackbird_regpack_main "amd-ucode"
+    fi
+}
+
+
+##
+## GRAPHIC MODULE
+function blackbird_system_graphic_module_intels() {
+
+    if [[ $SYSKERNL == "linux-hardened" ]];then
+
+        echo "display driver is intel at linux-hardened"
+
+    else
+        echo "display driver is intel"
+
+    fi
+}
+
+
+function blackbird_system_graphic_module_optinv() {
+
+    if [[ $SYSKERNL == "linux-hardened" ]];then
+
+        blackbird_regpack_main "linux-hardened-headers"
+        echo "display driver is optimus intel and nvdia at linux-hardened"
+
+    else
+        echo "display driver is optimus"
+    fi
+}
+
+
+function blackbird_system_graphic_module_nvidia() {
+    
+    if [[ $SYSKERNL == "linux-hardened" ]];then
+        echo "display driver is nvidia at linux-hardened"
+
+    else
+        echo "display driver is nvidia"
+
+    fi
+}
+
+
+function blackbird_system_graphic_module_atirad() {
+
+    if [[ $SYSKERNL == "linux-hardened" ]];then
+        echo "display driver is radeon at linux-hardened"
+
+    else
+        echo "display driver is radeon"
+
+    fi
+}
+
+
+function blackbird_system_graphic_module() {
+
+    if [[ $( echo ${SYSDISPL[*]} | grep "intel nvidia" ) ]];then
+
+        blackbird_system_graphic_module_optinv
+
+    elif [[ $( echo ${SYSDISPL[*]} | grep "nvidia" ) ]];then
+
+        blackbird_system_graphic_module_nvidia
+        
+    elif [[ $( echo ${SYSDISPL[*]} | grep "radeon" ) ]];then
+
+        blackbird_system_graphic_module_atirad
+
+    elif [[ $( echo ${SYSDISPL[*]} | grep "intel" ) ]];then
+
+        blackbird_system_graphic_module_intels
+        
+    fi
+}
+
+
+##
+## MAIN FUNCTION
+
+
+function blackbird_systems_prepare_main() {
+    blackbird_system_process_module
+    blackbird_system_graphic_module
+}
+
+
+function blackbird_systems_prepare_conf() {
+    rootc "adduser -u 5000 -g 5000 installman"
+    echo "installman ALL=(ALL) NOPASSWD:ALL" > /mnt/etc/sudoers.d/5000_installman
+}
+
+
+
+
+
+function blackbird_systems_prepare_done() {
+    rootc "mkinitpcio -P"
+    rootc "userdel -m installman"
+    rm /mnt/etc/sudoers.d/5000_installman
+}
+
+
+##
+## MAIN FUNCTION
+
+
+function blackbird_systems_install_reco() {
+    
+    ## install main package
+    blackbird_package_install_init
+
+    ## install basic configuration
+    blackbird_syscore_prepare_init
+
+
+    ## create prepared user
+    blackbird_systems_install_conf
+
+    ## install extended package
+    blackbird_package_install_aurs
+    blackbird_package_install_core
+    blackbird_package_install_flat
+
+
+    ## configure protocol
+    blackbird_package_install_core
+    blackbird_package_install_flat
+    blackbird_cryptos_prepare_init
+    blackbird_desktop_prepare_init
+    blackbird_develop_prepare_init
+    blackbird_kernels_prepare_reco
+    blackbird_virtman_prepare_init
+    blackbird_prevent_prepare_init
+    blackbird_network_prepare_init
+    blackbird_podmans_prepare_init
+    blackbird_secured_prepare_init
+    blackbird_tunning_prepare_init
+    blackbird_usercfg_prepare_init
+    blackbird_utility_prepare_init
+
+    ## remove prepard user
+    blackbird_systems_prepare_done
+}

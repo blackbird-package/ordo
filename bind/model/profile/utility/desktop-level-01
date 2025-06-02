@@ -1,0 +1,23 @@
+#!/bin/bash
+
+## UTILITY PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## WEBSITE
+blackbird_regpack_main "hugo go"
+
+
+##
+## NOTETAKING
+blackbird_regpack_main "obsidian"
+
+
+
+function blackbird_utility_prepare_init() {
+   blackbird_scope_init "Install Blackbird Utility Protocol"
+   echo 'debug protocol utility'
+   blackbird_scope_done
+}

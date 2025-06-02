@@ -1,0 +1,10 @@
+#!/bin/bash
+
+## 
+## WEBSITE
+blackbird_regpack_main "hugo go"
+
+
+##
+## NOTETAKING
+blackbird_regpack_main "obsidian"

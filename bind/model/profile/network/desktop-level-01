@@ -1,0 +1,39 @@
+#!/bin/bash
+
+
+## NETWORKING PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : 
+
+
+## 
+## REGISTER PACKAGE
+
+## ssh connection
+blackbird_regpack_main "openssh ethtool"
+
+
+##
+## NETWORK MODULE
+
+function blackbird_network_module_config_systemd() {
+
+    systemctl enable systemd-networkd.socket
+    systemctl enable systemd-resolved
+}
+
+function blackbird_network_module_config_openssh() {
+    systemctl enable sshd
+}
+
+
+
+
+##
+## MAIN FUNCTION
+function blackbird_network_prepare_init() {
+    blackbird_scope_init "Install Blackbird Network Protocol"
+    blackbird_network_module_config_systemd
+    blackbird_network_module_config_openssh
+    blackbird_scope_done
+}

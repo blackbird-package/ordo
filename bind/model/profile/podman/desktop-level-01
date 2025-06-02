@@ -1,0 +1,44 @@
+#!/bin/bash
+
+## PODMAN SYSTEM PROTOCOL BLACKBIRD LEVEL 1
+## lead : AL Muhdil Karim
+## team : -
+
+
+
+## 
+## REGISTER PACKAGE
+
+# podman
+blackbird_regpack_main "podman"
+
+
+# management
+blackbird_regpack_main "podman-desktop"
+
+
+# system extension
+blackbird_regpack_main "crun fuse-overlayfs"
+
+# podman utils
+blackbird_regpack_main "podman-docker podman-compose"
+
+
+##
+## PODMAN MODULE
+
+blackbird_podmans_module_config_registries() {
+    echo 'unqualified-search-registries = ["docker.io"]' > /mnt/etc/containers/10-unqualified-search-registries.conf
+}
+
+
+
+##
+## MAIN FUNCTION
+function blackbird_podmans_prepare_init() {
+    blackbird_scope_init "Install Blackbird Podman Protocol"
+    blackbird_podmans_module_config_registries
+    blackbird_scope_done
+}
+
+

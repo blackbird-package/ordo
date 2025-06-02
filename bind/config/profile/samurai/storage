@@ -1,0 +1,10 @@
+DISK_INIT="/dev/nvme0n1"
+PART_BOOT="/dev/nvme0n1p1"
+PART_KEYS="/dev/nvme0n1p2"
+PART_PROC="/dev/nvme0n1p3"
+PART_DATA="/dev/nvme0n1p4"
+                      
+SIZE_SRVS="50G"
+SIZE_PODS="100G"
+SIZE_VIRT="400G"
+SIZE_HOME="all"                      

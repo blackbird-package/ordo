@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+
+## 
+## REGISTER SOFTWARE MANAGEMENT
+blackbird_regpack_main "flatpak gnome-software"
