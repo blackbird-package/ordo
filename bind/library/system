@@ -170,7 +170,7 @@ function blackbird_systems_storage_shmfs() {
 
 
 function blackbird_systems_fakeuser_prep() {
-    rootc "useradd -u 5000 installman"
+    rootc "useradd installman"
     echo "installman ALL=(ALL) NOPASSWD:ALL" > /mnt/etc/sudoers.d/5000_installman
 }
 
