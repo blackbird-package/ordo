@@ -90,7 +90,7 @@ function blackbird_storage_prepare_lvdisk_base() {
 
     blackbird_progress "remove volume group proc"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "proc" ) ]];then
-        vgreduce proc /dev/mapper/lvm_proc
+        vgreduce -y -q proc /dev/mapper/lvm_proc
         vgremove -y -q proc > /dev/null
     fi
     blackbird_done
@@ -98,7 +98,7 @@ function blackbird_storage_prepare_lvdisk_base() {
 
     blackbird_progress "remove volume group data"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "data" ) ]];then
-        vgreduce data /dev/mapper/lvm_data
+        vgreduce -y -q data /dev/mapper/lvm_data
         vgremove -y -q data > /dev/null
     fi
     blackbird_done
