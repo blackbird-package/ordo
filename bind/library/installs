@@ -37,10 +37,8 @@ function blackbird_regpack_flat() {
 ## CHROOT WRAP
 
 function userc() {
-
     arch-chroot /mnt /bin/bash -c "sudo -H -u installman /bin/bash -c '$1'" 
 }
-
 
 function rootc() {
     arch-chroot /mnt /bin/bash -c "$1"
