@@ -58,7 +58,6 @@ function blackbird_package_install_module_yays() {
 
 function blackbird_package_install_module_aurs() {
     
-    echo ""
     echo ${AURSPACK[*]}
 }
 
@@ -76,9 +75,7 @@ function blackbird_package_install_module_core() {
 function blackbird_package_install_module_flat() {
    
     for flatapp in "${FLATPACK[@]}"; do
-
-        
-
+        echo $flatapp
     done
 }
 
