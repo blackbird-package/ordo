@@ -15,7 +15,7 @@ source "$BPAT/bind/library/auxiler";
 function blackbird_rebased() {
 
     clear
-    echo 'starting recovery procedure ...'
+    echo 'starting fressh build procedure ...'
     sleep 1
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
