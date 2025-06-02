@@ -15,9 +15,6 @@ source "$BPAT/bind/library/auxiler";
 function blackbird_rebased() {
 
     blackbird_auxiler_prepare_libs
-    blackbird_unpacks_prepare_main
-    blackbird_systems_prepare_main
-    blackbird_storage_prepare_base
-    blackbird_package_install_init
+   
 }
 
