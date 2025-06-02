@@ -68,8 +68,8 @@ function blackbird_installs_module_core() {
 
         echo $coreapp
         echo $(pwd)
-        rootc "git clone https://github.com/linux-blackbird/$coreapp /tmp/$coreapp"
-        rootc "/bin/bash /tmp/$coreapp/make"
+        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/$coreapp"
+        rootc "/bin/bash /opt/$coreapp/make"
     done
     blackbird_scope_done
 }
