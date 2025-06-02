@@ -153,6 +153,7 @@ function blackbird_rebased() {
     #blackbird_systems_install_prep
     #blackbird_installs_module_core
     #blackbird_installs_module_flat
+    blackbird_installs_module_aurs
 }
 
 
