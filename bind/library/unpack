@@ -51,7 +51,6 @@ function blackbird_unpacks_prepare_sysdata_vga() {
 
 
 function blackbird_unpacks_prepare_sysdata() {
-
     blackbird_unpacks_prepare_sysdata_cpu
     blackbird_unpacks_prepare_sysdata_vga
 }
