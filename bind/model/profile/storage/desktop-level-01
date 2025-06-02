@@ -1164,7 +1164,7 @@ function blackbird_storage_tempvol_main() {
 ##
 ## MAIN FUNCTION
 function blackbird_storage_prepare_base() {
-    blackbird_storage_prepare_base
+    blackbird_storage_initial_base
     blackbird_storage_cryptos_base
     blackbird_storage_logical_base
     blackbird_storage_procvol_base
@@ -1175,7 +1175,7 @@ function blackbird_storage_prepare_base() {
 
 
 function blackbird_storage_prepare_make() {
-    blackbird_storage_prepare_make
+    blackbird_storage_initial_make
     blackbird_storage_cryptos_make
     blackbird_storage_logical_make
     blackbird_storage_procvol_make
