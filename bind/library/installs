@@ -45,6 +45,10 @@ function rootc() {
     arch-chroot /mnt /bin/bash -c "$1"
 }
 
+function rootf() {
+    arch-chroot /mnt -c "$1"
+}
+
 
 
 ## 
