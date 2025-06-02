@@ -144,8 +144,8 @@ function blackbird_rebased() {
     #blackbird_installs_module_core
     #blackbird_installs_module_flat
     #blackbird_installs_module_aurs
-    blackbird_cryptos_prepare_init
-    blackbird_desktop_prepare_init
+    rootc "blackbird_cryptos_prepare_init"
+    rootc "blackbird_desktop_prepare_init"
 }
 
 
