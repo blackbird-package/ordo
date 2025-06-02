@@ -55,10 +55,10 @@ function blackbird_regramf_misc() {
 ## PROCESOR MODULE
 function blackbird_system_process_module() {
 
-    if [[ $SYSPROCS == "intel"  ]];then
+    if [[ $SYSPROCS == "intel" ]];then
         blackbird_regpack_main "intel-ucode"
 
-    elif [[ $SYSPROCS == "amd"  ]];then
+    elif [[ $SYSPROCS == "amd" ]];then
         blackbird_regpack_main "amd-ucode"
     fi
 }

@@ -16,6 +16,5 @@ function blackbird_recover() {
     sleep 1
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
-    blackbird_storage_prepare_reco
-    blackbird_systems_install_reco
+    blackbird_systems_install_base
 }

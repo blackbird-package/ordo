@@ -36,11 +36,11 @@ function blackbird_unpacks_prepare_sysdata_cpu() {
 
 function blackbird_unpacks_prepare_sysdata_vga() {
 
-    if [[ ! -z $( lspci | grep "VGA" | grep "Intel" )  ]];then
+    if [[ ! -z $( lspci | grep "VGA" | grep "Intel" ) ]];then
         SYSDISPL+=("intel")
     fi
 
-    if [[ ! -z $( lspci | grep "VGA" | grep "Nvidia" )  ]];then
+    if [[ ! -z $( lspci | grep "VGA" | grep "NVIDIA" ) ]];then
         SYSDISPL+=("nvidia")
     fi
 
