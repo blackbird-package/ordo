@@ -550,7 +550,6 @@ function blackbird_storage_sysvars_volume_reco() {
 }
 
 
-
 # logical vtmp
 function blackbird_storage_sysvtmp_volume_base() {
     
@@ -610,7 +609,7 @@ function blackbird_storage_sysvlog_volume_reco() {
 function blackbird_storage_sysvaud_volume_base() {
     
     lvcreate -y -q -L $SIZE_VAUD proc -n vaud
-    blackbird_storage_stsvaud_volume_reco
+    blackbird_storage_sysvaud_volume_reco
 }
 
 
@@ -632,7 +631,9 @@ function blackbird_storage_sysvaud_volume_reco() {
     if [[ ! -d /mnt/var/log/audit ]];then
         mkdir /mnt/var/log/audit
     fi
+
     yes | mkfs.ext4 -b 4096 /dev/proc/vaud
+
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/vaud /mnt/var/log/audit
 }
 
@@ -883,9 +884,10 @@ function blackbird_storage_datpods_volume_reco() {
         mkdir /mnt/var/lib
     fi
 
-    if [[ -d /mnt/var/lib/containers ]];then
+    if [[ ! -d /mnt/var/lib/containers ]];then
         mkdir /mnt/var/lib/containers
     fi
+
     mount -o defaults,rw,nosuid,nodev,relatime /dev/data/pods /mnt/var/lib/containers
 }
 
@@ -933,13 +935,13 @@ function blackbird_storage_dathome_volume_base() {
     fi
    
     yes | mkfs.ext4 -b 4096 /dev/data/home
-    blackbird_storage_syshome_volume_reco
+    blackbird_storage_dathome_volume_reco
 }
 
 
 function blackbird_storage_dathome_volume_make() {
     yes | mkfs.ext4 -b 4096 /dev/data/home
-    blackbird_storage_syshome_volume_reco
+    blackbird_storage_dathome_volume_reco
 }
 
 
