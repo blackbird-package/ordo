@@ -64,8 +64,8 @@ function blackbird_installs_module_yays() {
 
 function blackbird_installs_module_aurs() {
 
-    userc "git clone https://aur.archlinux.org/yay /opt/cache/yay"
-    userc "makepkg -sric --dir /opt/cache/yay --noconfirm"
+    userc "git clone https://aur.archlinux.org/yay /home/installman/yay"
+    userc "makepkg -sric --dir /home/installman/yay --noconfirm"
   
     echo ${AURSPACK[*]}
 }
