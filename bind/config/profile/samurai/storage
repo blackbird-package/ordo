@@ -1,8 +1,8 @@
-DISK_INIT="/dev/nvme0n1"
-PART_BOOT="/dev/nvme0n1p1"
-PART_KEYS="/dev/nvme0n1p2"
-PART_PROC="/dev/nvme0n1p3"
-PART_DATA="/dev/nvme0n1p4"
+DISK_INIT="/dev/vda"
+PART_BOOT="/dev/vda1"
+PART_KEYS="/dev/vda2"
+PART_PROC="/dev/vda3"
+PART_DATA="/dev/vda4"
                       
 SIZE_SRVS="50G"
 SIZE_PODS="100G"
