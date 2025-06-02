@@ -118,7 +118,7 @@ function blackbird_package_install_flat() {
 ##
 ## MAIN FUNCTION
 
-function blackbird_rebase() {
+function blackbird_rebased() {
     ## install main package
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
@@ -129,7 +129,7 @@ function blackbird_rebase() {
 
 
 
-function blackbird_recovery() {
+function blackbird_recover() {
     
     ## install main package
     blackbird_package_install_init
