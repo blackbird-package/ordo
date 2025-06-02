@@ -187,20 +187,18 @@ function blackbird_systems_install_reco() {
 
 
     ## configure protocol
-    blackbird_package_install_core
-    blackbird_package_install_flat
-    blackbird_cryptos_prepare_init
-    blackbird_desktop_prepare_init
-    blackbird_develop_prepare_init
-    blackbird_kernels_prepare_reco
-    blackbird_virtman_prepare_init
-    blackbird_prevent_prepare_init
-    blackbird_network_prepare_init
-    blackbird_podmans_prepare_init
-    blackbird_secured_prepare_init
-    blackbird_tunning_prepare_init
-    blackbird_usercfg_prepare_init
-    blackbird_utility_prepare_init
+    #blackbird_cryptos_prepare_init
+    #blackbird_desktop_prepare_init
+    #blackbird_develop_prepare_init
+    #blackbird_kernels_prepare_reco
+    #blackbird_virtman_prepare_init
+    #blackbird_prevent_prepare_init
+    #blackbird_network_prepare_init
+    #blackbird_podmans_prepare_init
+    #blackbird_secured_prepare_init
+    #lackbird_tunning_prepare_init
+    #blackbird_usercfg_prepare_init
+    #blackbird_utility_prepare_init
 
     ## remove prepard user
     blackbird_systems_prepare_done

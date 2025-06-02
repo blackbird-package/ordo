@@ -21,6 +21,5 @@ function blackbird_rebased() {
     blackbird_systems_prepare_main
     blackbird_storage_prepare_base
     blackbird_systems_install_reco
-
 }
 
