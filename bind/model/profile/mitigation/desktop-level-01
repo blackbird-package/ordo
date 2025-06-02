@@ -14,7 +14,7 @@ blackbird_regpack_main "rsync grsync"
 
 
 ## integrity
-blackbird_regpack_core "aide"
+## blackbird_regpack_core "aide"
 
 
 
