@@ -124,7 +124,7 @@ function blackbird_rebased() {
     blackbird_systems_prepare_main
     blackbird_storage_prepare_base
     blackbird_package_install_init
-    #blackbird_systems_storage_main
+    blackbird_systems_install_prep
 }
 
 

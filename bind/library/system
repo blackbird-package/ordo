@@ -16,6 +16,7 @@ KERNSECS=()
 KERNPERF=()
 KERNMISC=("rw" "quiet" )
 
+
 function blackbird_regramf_mods() {
     RAMFSMOD+=($1)
 }
@@ -137,9 +138,14 @@ function blackbird_system_graphic_module() {
     fi
 }
 
+function blackbird_systems_prepare_main() {
+    blackbird_system_process_module
+    blackbird_system_graphic_module
+}
+
 
 ##
-## TMPFS VOLUME
+## SYSTEM PREPARATION INIT
 
 function blackbird_systems_storage_fstab() {
     
@@ -162,8 +168,13 @@ function blackbird_systems_storage_shmfs() {
     fi
 }
 
+function blackbird_systems_fakeuser_prep() {
+    rootc "adduser -u 5000 -g 5000 installman"
+    echo "installman ALL=(ALL) NOPASSWD:ALL" > /mnt/etc/sudoers.d/5000_installman
+}
 
-function blackbird_systems_storage_main() {
+
+function blackbird_systems_install_prep() {
     
     blackbird_scope_init "TMPFS Storage Pool"
 
@@ -181,25 +192,15 @@ function blackbird_systems_storage_main() {
     blackbird_systems_storage_shmfs
     blackbird_done
 
+
+    blackbird_systems_fakeuser_prep
+
     blackbird_scope_done   
 }
 
 
 ##
-## MAIN FUNCTION
-
-
-function blackbird_systems_prepare_main() {
-    blackbird_system_process_module
-    blackbird_system_graphic_module
-}
-
-
-function blackbird_systems_prepare_conf() {
-    rootc "adduser -u 5000 -g 5000 installman"
-    echo "installman ALL=(ALL) NOPASSWD:ALL" > /mnt/etc/sudoers.d/5000_installman
-}
-
+## SYSTEM PREPARATION DONE
 
 function blackbird_systems_prepare_done() {
     rootc "mkinitpcio -P"
