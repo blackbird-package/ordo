@@ -65,14 +65,9 @@ function blackbird_installs_module_yays() {
 
 function blackbird_installs_module_aurs() {
 
-    if [ "$(type -t grep)" = "file" ]; then
-
-        echo "yay installed"
-    else
-        userc "git clone https://aur.archlinux.org/yay /tmp/yay"
-        userc "makepkg -sric --dir /tmp/yay --noconfirm"
-    fi
-
+    userc "git clone https://aur.archlinux.org/yay /tmp/yay"
+    userc "makepkg -sric --dir /tmp/yay --noconfirm"
+  
     echo ${AURSPACK[*]}
 }
 
