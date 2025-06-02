@@ -67,7 +67,7 @@ function blackbird_installs_module_core() {
     for coreapp in "${COREPACK[@]}"; do
 
         echo $coreapp
-        rootc "git clone https:/github.com/linux-blackbird/$coreapp /tmp/$coreapp"
+        rootc "git clone https://github.com/linux-blackbird/$coreapp /tmp/$coreapp"
         rootc "/bin/bash /tmp/$coreapp/make"
     done
     blackbird_scope_done
