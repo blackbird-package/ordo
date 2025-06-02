@@ -429,7 +429,7 @@ function blackbird_storage_sysroot_volume_make() {
 
 function blackbird_storage_sysroot_volume_reco() {
 
-    yes | mkfs.ext4 -b 4096 /dev/proc/root
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/root
     mount /dev/proc/root /mnt
 }
 
@@ -452,7 +452,7 @@ function blackbird_storage_sysconf_volume_reco() {
     if [[ ! -d /mnt/etc/ ]];then
         mkdir /mnt/etc/
     fi
-    yes | mkfs.ext4 -b 4096 /dev/proc/conf
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/conf
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/conf /mnt/etc
 }
 
@@ -482,7 +482,7 @@ function blackbird_storage_sysubin_volume_reco() {
         mkdir /mnt/usr/bin
     fi
 
-    yes | mkfs.ext4 -b 4096 /dev/proc/ubin
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/ubin
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/conf /mnt/etc
 }
 
@@ -506,7 +506,7 @@ function blackbird_storage_sysopts_volume_reco() {
         mkdir /mnt/opt/
     fi
 
-    yes | mkfs.ext4 -b 4096 /dev/proc/opts
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/opts
 
     mount -o defaults,rw,nosuid,nodev,relatime /dev/proc/opts /mnt/opt
 
@@ -545,7 +545,7 @@ function blackbird_storage_sysvars_volume_reco() {
     if [[ ! -d /mnt/var/ ]];then
         mkdir /mnt/var/
     fi
-    yes | mkfs.ext4 -b 4096 /dev/proc/vars
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/vars
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/vars /mnt/var
 }
 
@@ -573,7 +573,7 @@ function blackbird_storage_sysvtmp_volume_reco() {
         mkdir /mnt/var/tmp
     fi
 
-    yes | mkfs.ext4 -b 4096 /dev/proc/vtmp
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/vtmp
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/vtmp /mnt/var/tmp
 }
 
@@ -600,7 +600,7 @@ function blackbird_storage_sysvlog_volume_reco() {
     if [[ ! -d /mnt/var/log/ ]];then
         mkdir /mnt/var/log/
     fi
-    yes | mkfs.ext4 -b 4096 /dev/proc/vlog
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/vlog
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/vlog /mnt/var/log
 }
 
@@ -632,7 +632,7 @@ function blackbird_storage_sysvaud_volume_reco() {
         mkdir /mnt/var/log/audit
     fi
 
-    yes | mkfs.ext4 -b 4096 /dev/proc/vaud
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/vaud
 
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/proc/vaud /mnt/var/log/audit
 }
@@ -660,7 +660,7 @@ function blackbird_storage_sysvpac_volume_reco() {
     if [[ ! -d /mnt/var/cache/pacman ]];then
         mkdir /mnt/var/cache/pacman
     fi
-    yes | mkfs.ext4 -b 4096 /dev/proc/vpac
+    yes | mkfs.ext4 -q -b 4096 /dev/proc/vpac
     mount -o defaults,rw,nosuid,nodev,relatime /dev/proc/vpac /mnt/var/cache/pacman
 }
 
@@ -842,13 +842,13 @@ function blackbird_storage_procvol_reco() {
 function blackbird_storage_datsrvc_volume_base() {
 
     lvcreate -y -q -L $SIZE_SRVS data -n srvc
-    yes | mkfs.ext4 -b 4096 /dev/data/srvc
+    yes | mkfs.ext4 -q -b 4096 /dev/data/srvc
     blackbird_storage_datsrvc_volume_reco
 }
 
 
 function blackbird_storage_datsrvc_volume_make() {
-    yes | mkfs.ext4 -b 4096 /dev/data/srvc
+    yes | mkfs.ext4 -q -b 4096 /dev/data/srvc
     blackbird_storage_datsrvc_volume_reco
 }
 
@@ -934,13 +934,13 @@ function blackbird_storage_dathome_volume_base() {
         yes | lvcreate -y -q -L $SIZE_HOME data -n home
     fi
    
-    yes | mkfs.ext4 -b 4096 /dev/data/home
+    yes | mkfs.ext4 -q -b 4096 /dev/data/home
     blackbird_storage_dathome_volume_reco
 }
 
 
 function blackbird_storage_dathome_volume_make() {
-    yes | mkfs.ext4 -b 4096 /dev/data/home
+    yes | mkfs.ext4 -q -b 4096 /dev/data/home > /dev/null
     blackbird_storage_dathome_volume_reco
 }
 
