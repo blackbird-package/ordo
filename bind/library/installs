@@ -77,7 +77,7 @@ function blackbird_installs_module_core() {
         rootc "chmod +x /opt/cache/$coreapp"
         rootc "/bin/bash /opt/cache/$coreapp/make"
     done
-    
+
     blackbird_scope_done
 }
 
@@ -124,9 +124,9 @@ function blackbird_rebased() {
     ## install main package
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
-    #blackbird_storage_prepare_base
-    #blackbird_installs_module_base
-    #blackbird_systems_install_prep
+    blackbird_storage_prepare_base
+    blackbird_installs_module_base
+    blackbird_systems_install_prep
     blackbird_installs_module_core
 }
 
