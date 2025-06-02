@@ -85,10 +85,16 @@ function blackbird_installs_module_core() {
 
 
 function blackbird_installs_module_flat() {
-   
+    
+    blackbird_scope_init "Install Flatpak Packages"
+
     for flatapp in "${FLATPACK[@]}"; do
-        echo $flatapp
+        blackbird_progress "install $flatapp"
+        rootc "/usr/bin/flatpak install --system $flatapp --nointeractive"
+        blackbird_done
     done
+
+    blackbird_scope_done
 }
 
 
@@ -129,7 +135,8 @@ function blackbird_rebased() {
     #blackbird_storage_prepare_base
     #blackbird_installs_module_base
     #blackbird_systems_install_prep
-    blackbird_installs_module_core
+    #blackbird_installs_module_core
+    blackbird_installs_module_flat
 }
 
 
