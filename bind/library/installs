@@ -86,7 +86,7 @@ function blackbird_package_install_module_flat() {
 ## 
 ## MAIN FUNCTIONS
 
-function blackbird_package_install_base() {
+function blackbird_package_install_main() {
 
     blackbird_scope_init "Install Base Packages"
     pacstrap /mnt ${MAINPACK[*]} --noconfirm

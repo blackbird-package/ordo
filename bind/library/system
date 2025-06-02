@@ -214,13 +214,17 @@ function blackbird_systems_prepare_done() {
 ##
 ## MAIN FUNCTION
 
+function blackbird_systems_install_base() {
+    ## install main package
+    blackbird_package_install_main
+    blackbird_systems_storage_main
+}
 
 function blackbird_systems_install_reco() {
     
     ## install main package
-    blackbird_package_install_base
+    blackbird_package_install_main
     blackbird_systems_storage_main
-    
     
     
     ## install basic configuration
