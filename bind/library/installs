@@ -50,28 +50,29 @@ function rootc() {
 ## 
 ### MODULE
 
-function blackbird_package_install_module_yays() {
+function blackbird_installs_module_yays() {
     userc "git clone https://aur.archlinux.org/yay /tmp/yay"
     userc "makepkg -sric --dir /tmp/yay --noconfirm"
 }
 
 
-function blackbird_package_install_module_aurs() {
+function blackbird_installs_module_aurs() {
     echo ${AURSPACK[*]}
 }
 
 
-function blackbird_package_install_module_core() {
+function blackbird_installs_module_core() {
 
-
+    blackbird_scope_init "Install Core Packages"
     for coreapp in "${COREPACK[@]}"; do
         rootc "git clone https://aur.archlinux.org/$coreapp /tmp/"
         rootc "/bin/bash /tmp/$coreapp/make"
     done
+    blackbird_scope_done
 }
 
 
-function blackbird_package_install_module_flat() {
+function blackbird_installs_module_flat() {
    
     for flatapp in "${FLATPACK[@]}"; do
         echo $flatapp
@@ -95,15 +96,6 @@ function blackbird_package_install_aurs() {
     blackbird_scope_done    
 }
 
-
-
-function blackbird_package_install_core() {
-    blackbird_scope_init "Install Core Packages"
-    blackbird_package_install_module_core
-    blackbird_scope_done
-}
-
-
 function blackbird_package_install_flat() {
     blackbird_scope_init "Install Flatpak Packages"
     blackbird_package_install_module_flat
@@ -118,12 +110,14 @@ function blackbird_package_install_flat() {
 ## MAIN FUNCTION
 
 function blackbird_rebased() {
+    
     ## install main package
-    ##blackbird_unpacks_prepare_main
-    ##blackbird_systems_prepare_main
-    ##blackbird_storage_prepare_base
-    ##blackbird_package_install_init
-    blackbird_systems_install_prep
+    #blackbird_unpacks_prepare_main
+    #blackbird_systems_prepare_main
+    #blackbird_storage_prepare_base
+    #blackbird_package_install_init
+    #blackbird_systems_install_prep
+    blackbird_system_install_module_core
 }
 
 
