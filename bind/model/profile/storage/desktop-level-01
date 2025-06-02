@@ -62,9 +62,15 @@ function blackbird_storage_prepare_lvdisk_base() {
     for proclv in "${LVPROC[@]}"; do
 
         blackbird_progress "remove /dev/proc/$proclv"
-        if  [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $proclv ) ]];then
-            yes | lvremove /dev/proc/$proclv > /dev/null
+
+        if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $proclv ) ]] && [[ $proclv == "swap"  ]];then
+            swapoff  /dev/proc/$proclv
         fi
+
+        if  [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $proclv ) ]];then
+            lvremove -y -q /dev/proc/$proclv > /dev/null
+        fi
+
         blackbird_done
 
     done
@@ -72,9 +78,10 @@ function blackbird_storage_prepare_lvdisk_base() {
     for datalv in "${LVDATA[@]}"; do
 
         blackbird_progress "remove /dev/data/$datalv"
+        
         if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $datalv ) ]];then
-            echo "debug"
-            yes | lvremove /dev/data/$datalv > /dev/null
+            
+            lvremove lvremove -y -q /dev/data/$datalv > /dev/null
         fi
         blackbird_done
     done
@@ -82,32 +89,29 @@ function blackbird_storage_prepare_lvdisk_base() {
 
     blackbird_progress "remove volume group proc"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
-        yes | vgremove proc > /dev/null
+        
+        vgremove -y -q proc > /dev/null
     fi
     blackbird_done
 
 
     blackbird_progress "remove volume group data"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "data" ) ]];then
-        echo "debug"
-        yes | vgremove data > /dev/null
+        vgremove -y -q data > /dev/null
     fi
     blackbird_done
 
 
     blackbird_progress "remove physical volume proc"
     if [[ ! -z $(/usr/bin/pvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
-        yes | pvremove /dev/mapper/lvm_proc > /dev/null  
+        pvremove -y -q /dev/mapper/lvm_proc > /dev/null  
     fi
     blackbird_done
 
 
     blackbird_progress "remove physical volume data"
     if [[ ! -z $(/usr/bin/pvs | /usr/bin/grep "data" ) ]];then
-        echo "debug"
-        yes | pvremove /dev/mapper/lvm_data > /dev/null
+        pvremove -y -q /dev/mapper/lvm_data > /dev/null
     fi
     blackbird_done
 }
@@ -128,7 +132,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
         blackbird_progress "unmount /dev/proc/$proclv"
         if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $proclv ) ]];then
-            echo "debug"
+            
             yes | umount /dev/data/$proclv > /dev/null
         fi
         blackbird_done
@@ -140,7 +144,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
         blackbird_progress "unmount /dev/data/$datalv"
         if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $datalv ) ]];then
-            echo "debug"
+            
             umount /dev/data/$datalv > /dev/null
         fi
         blackbird_done
@@ -150,7 +154,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
     blackbird_progress "umount volume group proc"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
+        
         yes | vgchange -a n  data > /dev/null
     fi
     blackbird_done
@@ -158,7 +162,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
     blackbird_progress "unmount physical volume proc"
     if [[ ! -z $(/usr/bin/pvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
+        
         yes | unmount /dev/mapper/lvm_proc > /dev/null
     fi
     blackbird_done 
@@ -166,7 +170,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
     blackbird_progress "deactivate volume group data"
     if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
+        
         yes | vgchange -a n data > /dev/null
     fi
     blackbird_done 
@@ -174,7 +178,7 @@ function blackbird_storage_prepare_lvdisk_reco() {
 
     blackbird_progress "deactivate physical volume data"
     if [[ ! -z $(/usr/bin/pvs | /usr/bin/grep "proc" ) ]];then
-        echo "debug"
+        
         yes | unmount /dev/mapper/lvm_data > /dev/null
     fi
     blackbird_done
@@ -354,11 +358,11 @@ function blackbird_storage_logical_volume_base() {
     blackbird_storage_logical_volume_reco
 
     blackbird_progress "create data physical volume"
-    pvcreate /dev/mapper/lvm_data
+    pvcreate -y -q /dev/mapper/lvm_data
     blackbird_done
 
     blackbird_progress "create data group volume"
-    vgcreate data /dev/mapper/lvm_data
+    vgcreate -y -q data /dev/mapper/lvm_data
     blackbird_done
 }
 
@@ -413,7 +417,7 @@ function blackbird_storage_logical_reco() {
 # logical root
 function blackbird_storage_sysroot_volume_base() {
 
-    yes | lvcreate -L $SIZE_ROOT proc -n root
+    yes | lvcreate -y -q -L $SIZE_ROOT proc -n root
     blackbird_storage_sysroot_volume_reco
 }
 
@@ -433,7 +437,7 @@ function blackbird_storage_sysroot_volume_reco() {
 # logical conf
 function blackbird_storage_sysconf_volume_base() {
     
-    yes | lvcreate -L $SIZE_CONF proc -n conf
+    yes | lvcreate -y -q -L $SIZE_CONF proc -n conf
     blackbird_storage_sysconf_volume_reco
 }
 
@@ -457,7 +461,7 @@ function blackbird_storage_sysconf_volume_reco() {
 # logical ubin
 function blackbird_storage_sysubin_volume_base() {
      
-    lvcreate -L $SIZE_UBIN proc -n ubin
+    lvcreate -y -q -L $SIZE_UBIN proc -n ubin
     blackbird_storage_sysubin_volume_reco
 }
 
@@ -486,7 +490,7 @@ function blackbird_storage_sysubin_volume_reco() {
 # logical opts
 function blackbird_storage_sysopts_volume_base() {
     
-    lvcreate -L $SIZE_OPTS proc -n opts
+    lvcreate -y -q -L $SIZE_OPTS proc -n opts
     blackbird_storage_sysopts_volume_reco
 }
 
@@ -525,7 +529,7 @@ function blackbird_storage_sysopts_volume_reco() {
 # logical vars
 function blackbird_storage_sysvars_volume_base() {
     
-    lvcreate -L $SIZE_VARS proc -n vars
+    lvcreate -y -q -L $SIZE_VARS proc -n vars
     blackbird_storage_sysvars_volume_reco
 }
 
@@ -550,7 +554,7 @@ function blackbird_storage_sysvars_volume_reco() {
 # logical vtmp
 function blackbird_storage_sysvtmp_volume_base() {
     
-    lvcreate -L $SIZE_VTMP proc -n vtmp
+    lvcreate -y -q -L $SIZE_VTMP proc -n vtmp
     blackbird_storage_sysvtmp_volume_reco
 }
 
@@ -578,7 +582,7 @@ function blackbird_storage_sysvtmp_volume_reco() {
 # logical vlog
 function blackbird_storage_sysvlog_volume_base() {
     
-    lvcreate -L $SIZE_VLOG proc -n vlog
+    lvcreate -y -q -L $SIZE_VLOG proc -n vlog
     blackbird_storage_sysvlog_volume_reco
 }
 
@@ -605,7 +609,7 @@ function blackbird_storage_sysvlog_volume_reco() {
 # logical vaud
 function blackbird_storage_sysvaud_volume_base() {
     
-    lvcreate -L $SIZE_VAUD proc -n vaud
+    lvcreate -y -q -L $SIZE_VAUD proc -n vaud
     blackbird_storage_stsvaud_volume_reco
 }
 
@@ -636,7 +640,7 @@ function blackbird_storage_sysvaud_volume_reco() {
 # logical vpac
 function blackbird_storage_sysvpac_volume_base() {
     
-    lvcreate -L $SIZE_VPAC proc -n vpac
+    lvcreate -y -q -L $SIZE_VPAC proc -n vpac
     blackbird_storage_sysvpac_volume_reco
 }
 
@@ -663,7 +667,7 @@ function blackbird_storage_sysvpac_volume_reco() {
 # logical swap
 function blackbird_storage_sysswap_volume_base() {
     
-    lvcreate -l 100%FREE proc -n swap
+    lvcreate -y -q -l 100%FREE proc -n swap
     mkswap /dev/proc/swap
     swapon /dev/proc/swap
 }
@@ -836,7 +840,7 @@ function blackbird_storage_procvol_reco() {
 # logical srvc
 function blackbird_storage_datsrvc_volume_base() {
 
-    lvcreate -L $SIZE_SRVS data -n srvc
+    lvcreate -y -q -L $SIZE_SRVS data -n srvc
     yes | mkfs.ext4 -b 4096 /dev/data/srvc
     blackbird_storage_datsrvc_volume_reco
 }
@@ -861,7 +865,7 @@ function blackbird_storage_datsrvc_volume_reco() {
 # logical pods
 function blackbird_storage_datpods_volume_base() {
 
-    lvcreate -L $SIZE_PODS data -n pods
+    lvcreate -y -q -L $SIZE_PODS data -n pods
     yes | mkfs.xfs -fs size=4096 /dev/data/pods
     blackbird_storage_datpods_volume_reco
 }
@@ -889,7 +893,7 @@ function blackbird_storage_datpods_volume_reco() {
 # logical virt
 function blackbird_storage_datvirt_volume_base() {
     
-    lvcreate -L $SIZE_VIRT data -n host
+    lvcreate -y -q -L $SIZE_VIRT data -n host
     yes | mkfs.xfs -fs size=4096 /dev/data/host
     blackbird_storage_datvirt_volume_reco
 }
@@ -923,9 +927,9 @@ function blackbird_storage_datvirt_volume_reco() {
 function blackbird_storage_dathome_volume_base() {
 
     if [[ $SIZE_HOME == "all" ]];then
-        yes | lvcreate -l 100%FREE data -n home
+        yes | lvcreate -y -q -l 100%FREE data -n home
     else
-        yes | lvcreate -L $SIZE_HOME data -n home
+        yes | lvcreate -y -q -L $SIZE_HOME data -n home
     fi
    
     yes | mkfs.ext4 -b 4096 /dev/data/home
@@ -1126,13 +1130,13 @@ function blackbird_storage_tempvol_fstab() {
 
 
 function blackbird_storage_tempvol_tmpfs() {
-    echo "debug"
+    
     echo 'tmpfs     /tmp        tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=1G    0 0' >> /mnt/etc/fstab
 }
 
 
 function blackbird_storage_tempvol_shmfs() {
-    echo "debug"
+    
     echo 'tmpfs     /dev/shm    tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=1G    0 0' >> /mnt/etc/fstab
 }
 
