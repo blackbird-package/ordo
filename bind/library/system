@@ -139,6 +139,53 @@ function blackbird_system_graphic_module() {
 
 
 ##
+## TMPFS VOLUME
+
+function blackbird_systems_storage_fstab() {
+    
+    genfstab -U /mnt > /mnt/etc/fstab
+}
+
+
+function blackbird_systems_storage_tmpfs() {
+    
+    if [[ ! -z $SRAM_TMPS ]];then
+        echo "tmpfs     /tmp        tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=$SRAM_TMPS    0 0" >> /mnt/etc/fstab
+    fi
+}
+
+
+function blackbird_systems_storage_shmfs() {
+    
+    if [[ ! -z $SRAM_SHMS ]];then
+        echo "tmpfs     /dev/shm    tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=$SRAM_SHMS    0 0" >> /mnt/etc/fstab
+    fi
+}
+
+
+function blackbird_systems_storage_main() {
+    
+    blackbird_scope_init "TMPFS Storage Pool"
+
+    blackbird_progress "generate partition layout"
+    blackbird_systems_storage_fstab
+    blackbird_done
+
+
+    blackbird_progress "create tmp partition"
+    blackbird_systems_storage_tmpfs
+    blackbird_done
+
+
+    blackbird_progress "create shm partition"
+    blackbird_systems_storage_shmfs
+    blackbird_done
+
+    blackbird_scope_done   
+}
+
+
+##
 ## MAIN FUNCTION
 
 
@@ -171,10 +218,13 @@ function blackbird_systems_prepare_done() {
 function blackbird_systems_install_reco() {
     
     ## install main package
-    blackbird_package_install_init
-
+    blackbird_package_install_base
+    blackbird_systems_storage_main
+    
+    
+    
     ## install basic configuration
-    blackbird_syscore_prepare_init
+    #blackbird_syscore_prepare_init
 
 
     ## create prepared user

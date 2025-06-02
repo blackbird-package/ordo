@@ -867,13 +867,13 @@ function blackbird_storage_datsrvc_volume_reco() {
 function blackbird_storage_datpods_volume_base() {
 
     lvcreate -y -q -L $SIZE_PODS data -n pods
-    yes | mkfs.xfs -fs size=4096 /dev/data/pods
+    yes | mkfs.xfs -q  -fs size=4096 /dev/data/pods
     blackbird_storage_datpods_volume_reco
 }
 
 
 function blackbird_storage_datpods_volume_make() {
-    yes | mkfs.xfs -fs size=4096 /dev/data/pods
+    yes | mkfs.xfs -q  -fs size=4096 /dev/data/pods
     blackbird_storage_datpods_volume_reco
 }
 
@@ -896,13 +896,13 @@ function blackbird_storage_datpods_volume_reco() {
 function blackbird_storage_datvirt_volume_base() {
     
     lvcreate -y -q -L $SIZE_VIRT data -n host
-    yes | mkfs.xfs -fs size=4096 /dev/data/host
+    yes | mkfs.xfs -q  -fs size=4096 /dev/data/host
     blackbird_storage_datvirt_volume_reco
 }
 
 
 function blackbird_storage_datvirt_volume_make() {
-    yes | mkfs.xfs -fs size=4096 /dev/data/host
+    yes | mkfs.xfs -q  -fs size=4096 /dev/data/host
     blackbird_storage_datvirt_volume_reco
 }
 
@@ -1119,54 +1119,6 @@ function blackbird_storage_bootvol_reco() {
 
 
 ##
-## TMPFS VOLUME
-
-function blackbird_storage_tempvol_fstab() {
-    
-    if [[ ! -e /mnt/etc/fstab ]];then
-        touch /mnt/etc/fstab
-    fi
-
-    genfstab -U /mnt > /mnt/etc/fstab
-}
-
-
-function blackbird_storage_tempvol_tmpfs() {
-    
-    echo 'tmpfs     /tmp        tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=1G    0 0' >> /mnt/etc/fstab
-}
-
-
-function blackbird_storage_tempvol_shmfs() {
-    
-    echo 'tmpfs     /dev/shm    tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=1G    0 0' >> /mnt/etc/fstab
-}
-
-
-function blackbird_storage_tempvol_main() {
-    
-    blackbird_scope_init "TMPFS Storage Pool"
-
-    blackbird_progress "generate partition layout"
-    blackbird_storage_tempvol_fstab
-    blackbird_done
-
-
-    blackbird_progress "create tmp partition"
-    blackbird_storage_tempvol_tmpfs
-    blackbird_done
-
-
-    blackbird_progress "create shm partition"
-    blackbird_storage_tempvol_shmfs
-    blackbird_done
-
-    blackbird_scope_done   
-}
-
-
-
-##
 ## MAIN FUNCTION
 function blackbird_storage_prepare_base() {
     blackbird_storage_initial_base
@@ -1175,7 +1127,6 @@ function blackbird_storage_prepare_base() {
     blackbird_storage_procvol_base
     blackbird_storage_datavol_base
     blackbird_storage_bootvol_reco
-    blackbird_storage_tempvol_main
 }
 
 
@@ -1186,7 +1137,6 @@ function blackbird_storage_prepare_make() {
     blackbird_storage_procvol_make
     blackbird_storage_datavol_make
     blackbird_storage_bootvol_reco
-    blackbird_storage_tempvol_main
 }
 
 
@@ -1197,5 +1147,4 @@ function blackbird_storage_prepare_reco() {
     blackbird_storage_procvol_reco
     blackbird_storage_datavol_reco
     blackbird_storage_bootvol_reco
-    blackbird_storage_tempvol_main
 }
