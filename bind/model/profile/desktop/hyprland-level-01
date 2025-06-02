@@ -34,7 +34,7 @@ blackbird_regpack_core "wofi"
 
 # dekstop manager
 blackbird_regpack_main "sddm"
-blackbird_regpack_core "login"
+blackbird_regpack_core "claw"
 
 
 # desktop theme
