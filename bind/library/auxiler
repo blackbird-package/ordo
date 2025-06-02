@@ -76,7 +76,7 @@ function blackbird_auxiler_prepare_libs() {
 
             source "$BPAT/bind/library/$module"
             echo "$module loaded"
-            sleep 1
+            sleep 5
         else
 
             blackbird_error "$module is missing or misconfigured"
