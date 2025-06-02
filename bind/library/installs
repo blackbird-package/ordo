@@ -124,9 +124,9 @@ function blackbird_rebased() {
     ## install main package
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
-    blackbird_storage_prepare_base
-    blackbird_installs_module_base
-    blackbird_systems_install_prep
+    #blackbird_storage_prepare_base
+    #blackbird_installs_module_base
+    #blackbird_systems_install_prep
     blackbird_installs_module_core
 }
 
