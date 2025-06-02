@@ -69,5 +69,12 @@ function blackbird_done() {
 LIBRARY=("unpack" "installs" "system")
 
 for module in "${LIBRARY[@]}"; do
-    source $BPAT$"/bind/library/"$module
+
+    if [[ -e "$BPAT/bind/library/$module" ]];then
+
+        source "$BPAT/bind/library/$module"
+    else
+        blackbird_info "$module is missing or misconfigured"
+    fi
+    
 done
