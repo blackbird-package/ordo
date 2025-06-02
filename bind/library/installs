@@ -45,10 +45,6 @@ function rootc() {
     arch-chroot /mnt /bin/bash -c "$1"
 }
 
-function rootf() {
-    arch-chroot /mnt /bin/basjh "$1"
-}
-
 
 
 ## 
@@ -75,7 +71,7 @@ function blackbird_installs_module_core() {
         fi
 
         rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
-        rootc "/bin/bash /opt/cache/$coreapp/make"
+        rootc "'/bin/bash /opt/cache/$coreapp/make'"
     done
     blackbird_scope_done
 }
