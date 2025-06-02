@@ -3,18 +3,18 @@
 ## load library
 export BBPROFILE=$2
 export BPAT="/ordo"
+source "$BPAT/bind/library/auxiler";
 
-if [[ $1 == "install" ]];then
-    source "$BPAT/bind/make";
-    blackbird_install
-fi
 
 if [[ $1 == "rebase" ]];then
-    source "$BPAT/bind/base";
     blackbird_rebased
 fi
 
+if [[ $1 == "install" ]];then
+    blackbird_install
+fi
+
+
 if [[ $1 == "reset" ]];then
-    source "$BPAT/bind/reset";
     blackbird_recover
 fi

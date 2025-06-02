@@ -6,7 +6,8 @@
 
 
 ## load library
-BPAT=$(pwd)
+
+BPAT=/ordo
 source "$BPAT/bind/library/auxiler";
 
 
