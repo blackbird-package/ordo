@@ -68,6 +68,8 @@ function blackbird_installs_module_core() {
 
         if [[ ! -d  /mnt/opt/cache ]];then
             mkdir /mnt/opt/cache
+        else
+            yes | rm -fr /mnt/opt/cache/*
         fi
 
         rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
