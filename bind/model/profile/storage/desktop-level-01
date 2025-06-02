@@ -445,7 +445,7 @@ function blackbird_storage_sysconf_volume_make() {
 
 function blackbird_storage_sysconf_volume_reco() {
 
-    if [[ -d /mnt/etc/ ]];then
+    if [[ ! -d /mnt/etc/ ]];then
         mkdir /mnt/etc/
     fi
     yes | mkfs.ext4 -b 4096 /dev/proc/conf
@@ -470,11 +470,11 @@ function blackbird_storage_sysubin_volume_make() {
 
 function blackbird_storage_sysubin_volume_reco() {
     
-    if [[ -d /mnt/usr/ ]];then
+    if [[ ! -d /mnt/usr/ ]];then
         mkdir /mnt/usr/
     fi
 
-    if [[ -d /mnt/usr/bin ]];then
+    if [[ ! -d /mnt/usr/bin ]];then
         mkdir /mnt/usr/bin
     fi
 
@@ -498,7 +498,7 @@ function blackbird_storage_sysopts_volume_make() {
 
 function blackbird_storage_sysopts_volume_reco() {
     
-    if [[ -d /mnt/opt/ ]];then
+    if [[ ! -d /mnt/opt/ ]];then
         mkdir /mnt/opt/
     fi
 
@@ -506,16 +506,16 @@ function blackbird_storage_sysopts_volume_reco() {
 
     mount -o defaults,rw,nosuid,nodev,relatime /dev/proc/opts /mnt/opt
 
-    if [[ -d /mnt/opt/flat ]];then
+    if [[ ! -d /mnt/opt/flat ]];then
         mkdir /mnt/opt/flat
     fi
 
 
-    if [[ -d /mnt/opt/apps ]];then
+    if [[ ! -d /mnt/opt/apps ]];then
         mkdir /mnt/opt/apps
     fi
 
-    if [[ -d /mnt/opt/rbin ]];then
+    if [[ ! -d /mnt/opt/rbin ]];then
         mkdir /mnt/opt/rbin
     fi
 }
@@ -538,7 +538,7 @@ function blackbird_storage_sysvars_volume_make() {
 
 function blackbird_storage_sysvars_volume_reco() {
     
-    if [[ -d /mnt/var/ ]];then
+    if [[ ! -d /mnt/var/ ]];then
         mkdir /mnt/var/
     fi
     yes | mkfs.ext4 -b 4096 /dev/proc/vars
@@ -562,11 +562,11 @@ function blackbird_storage_sysvtmp_volume_make() {
 
 function blackbird_storage_sysvtmp_volume_reco() {
     
-    if [[ -d /mnt/var/ ]];then
+    if [[ ! -d /mnt/var/ ]];then
         mkdir /mnt/var/
     fi
 
-    if [[ -d /mnt/var/tmp ]];then
+    if [[ ! -d /mnt/var/tmp ]];then
         mkdir /mnt/var/tmp
     fi
 
@@ -590,11 +590,11 @@ function blackbird_storage_sysvlog_volume_make() {
 
 function blackbird_storage_sysvlog_volume_reco() {
     
-    if [[ -d /mnt/var/ ]];then
+    if [[ ! -d /mnt/var/ ]];then
         mkdir /mnt/var/
     fi
 
-    if [[ -d /mnt/var/log/ ]];then
+    if [[ ! -d /mnt/var/log/ ]];then
         mkdir /mnt/var/log/
     fi
     yes | mkfs.ext4 -b 4096 /dev/proc/vlog
@@ -617,15 +617,15 @@ function blackbird_storage_sysvaud_volume_make() {
 
 function blackbird_storage_sysvaud_volume_reco() {
     
-    if [[ -d /mnt/var/ ]];then
+    if [[ ! -d /mnt/var/ ]];then
         mkdir /mnt/var/
     fi
 
-    if [[ -d /mnt/var/log/ ]];then
+    if [[ ! -d /mnt/var/log/ ]];then
         mkdir /mnt/var/log/
     fi
 
-    if [[ -d /mnt/var/log/audit ]];then
+    if [[ ! -d /mnt/var/log/audit ]];then
         mkdir /mnt/var/log/audit
     fi
     yes | mkfs.ext4 -b 4096 /dev/proc/vaud
@@ -648,11 +648,11 @@ function blackbird_storage_sysvpac_volume_make() {
 
 function blackbird_storage_sysvpac_volume_reco() {
     
-    if [[ -d /mnt/var/cache/ ]];then
+    if [[ ! -d /mnt/var/cache/ ]];then
         mkdir /mnt/var/cache/
     fi
 
-    if [[ -d /mnt/var/cache/pacman ]];then
+    if [[ ! -d /mnt/var/cache/pacman ]];then
         mkdir /mnt/var/cache/pacman
     fi
     yes | mkfs.ext4 -b 4096 /dev/proc/vpac
@@ -850,7 +850,7 @@ function blackbird_storage_datsrvc_volume_make() {
 
 function blackbird_storage_datsrvc_volume_reco() {
 
-    if [[ -d /mnt/srv ]];then
+    if [[ ! -d /mnt/srv ]];then
        mkdir /mnt/srv
     fi
     mount -o defaults,rw,nosuid,nodev,relatime /dev/data/srvc /mnt/srv
@@ -875,7 +875,7 @@ function blackbird_storage_datpods_volume_make() {
 
 function blackbird_storage_datpods_volume_reco() {
 
-    if [[ -d /mnt/var/lib ]];then
+    if [[ ! -d /mnt/var/lib ]];then
         mkdir /mnt/var/lib
     fi
 
@@ -903,15 +903,15 @@ function blackbird_storage_datvirt_volume_make() {
 
 function blackbird_storage_datvirt_volume_reco() {
 
-    if [ -d /mnt/var/lib ];then
+    if [ ! -d /mnt/var/lib ];then
         mkdir /mnt/var/lib
     fi
 
-    if [ -d /mnt/var/lib/libvirt ];then
+    if [ ! -d /mnt/var/lib/libvirt ];then
         mkdir /mnt/var/lib/libvirt
     fi
 
-    if [ -d /mnt/var/lib/libvirt/images ];then
+    if [ ! -d /mnt/var/lib/libvirt/images ];then
         mkdir /mnt/var/lib/libvirt/images
     fi
     mount -o defaults,rw,nosuid,nodev,relatime /dev/data/host /mnt/var/lib/libvirt/images
@@ -923,11 +923,9 @@ function blackbird_storage_datvirt_volume_reco() {
 function blackbird_storage_dathome_volume_base() {
 
     if [[ $SIZE_HOME == "all" ]];then
-        echo "debug"
-        #yes | lvcreate -l 100%FREE data -n home
+        yes | lvcreate -l 100%FREE data -n home
     else
-        echo "debug"
-        #yes | lvcreate -L $SIZE_HOME data -n home
+        yes | lvcreate -L $SIZE_HOME data -n home
     fi
    
     yes | mkfs.ext4 -b 4096 /dev/data/home
@@ -943,7 +941,7 @@ function blackbird_storage_dathome_volume_make() {
 
 function blackbird_storage_dathome_volume_reco() {
 
-    if [ -d /mnt/home ];then
+    if [[ ! -d /mnt/home ]];then
         mkdir /mnt/home
     fi
     mount -o defaults,rw,nosuid,nodev,noexec,relatime /dev/data/home /mnt/home
@@ -1047,7 +1045,7 @@ function blackbird_storage_bootvol_volume_make() {
 function blackbird_storage_bootvol_volume_reco() {
     
     blackbird_progress "create boot mount target"
-    if [ -d /mnt/boot ];then
+    if [[ ! -d /mnt/boot ]];then
 	    mkdir /mnt/boot
     fi
     blackbird_done
@@ -1057,34 +1055,33 @@ function blackbird_storage_bootvol_volume_reco() {
    
     mount -o defaults,rw,nosuid,nodev,noexec,relatime $PART_BOOT /mnt/boot
 
-    if [[ -d /mnt/boot/efi ]];then
+    if [[ ! -d /mnt/boot/efi ]];then
         mkdir /mnt/boot/efi
     fi
 
-    if [[ -d /mnt/boot/efi/boot ]];then
+    if [[ ! -d /mnt/boot/efi/boot ]];then
         mkdir /mnt/boot/efi/boot
     fi
 
-    if [[ -d /mnt/boot/efi/linux ]];then
+    if [[ ! -d /mnt/boot/efi/linux ]];then
         mkdir /mnt/boot/efi/linux
     fi
 
-    if [[ -d /mnt/boot/efi/rescue ]];then
+    if [[ ! -d /mnt/boot/efi/rescue ]];then
         mkdir /mnt/boot/efi/rescue
     fi
 
-    if [[ -d /mnt/boot/efi/systemd ]];then
+    if [[ ! -d /mnt/boot/efi/systemd ]];then
         mkdir /mnt/boot/efi/systemd
     fi
 
-    if [[ -d /mnt/boot/kernel ]];then
+    if [[ ! -d /mnt/boot/kernel ]];then
         mkdir /mnt/boot/kernel
     fi
 
-    if [[ -d /mnt/boot/loader ]];then
+    if [[ ! -d /mnt/boot/loader ]];then
         mkdir /mnt/boot/kernel
     fi
-
 
     blackbird_done
 }
@@ -1119,7 +1116,11 @@ function blackbird_storage_bootvol_reco() {
 ## TMPFS VOLUME
 
 function blackbird_storage_tempvol_fstab() {
-    echo "debug"
+    
+    if [[ ! -e /mnt/etc/fstab ]];then
+        touch /mnt/etc/fstab
+    fi
+
     genfstab -U /mnt > /mnt/etc/fstab
 }
 
