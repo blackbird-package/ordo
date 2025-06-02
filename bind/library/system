@@ -204,14 +204,14 @@ function blackbird_systems_install_prep() {
 ## SYSTEM PREPARATION DONE
 
 function blackbird_systems_fakeuser_done() {
-
+    rootc "userdel -m installman"
+    rm /mnt/etc/sudoers.d/5000_installman
 }
 
 
 function blackbird_systems_install_done() {
     rootc "mkinitpcio -P"
-    rootc "userdel -m installman"
-    rm /mnt/etc/sudoers.d/5000_installman
+   
 }
 
 
