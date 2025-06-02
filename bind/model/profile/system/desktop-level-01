@@ -11,7 +11,7 @@
 
 ## main
 blackbird_regpack_main "base base-devel"
-blackbird_regpack_core "sys-01"
+blackbird_regpack_core "conf"
 
 
 ## util
