@@ -71,9 +71,8 @@ function blackbird_installs_module_core() {
         yes | rm -fr /mnt/opt/cache/*
     fi
 
-
     for coreapp in "${COREPACK[@]}"; do
-        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp >  > /dev/null"
+        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp > /dev/null"
         rootc "chmod +x /opt/cache/$coreapp"
         rootc "/bin/bash /opt/cache/$coreapp/make"
     done
