@@ -38,6 +38,7 @@ function blackbird_storage_prepare_umount_main() {
     MTPOINT=( "/mnt" "/mnt/boot" "/mnt/etc" "/mnt/usr/bin" "/mnt/opt" "/mnt/var" "/mnt/var/tmp" "/mnt/var/log" "/mnt/var/log/audit" \
               "/var/cache/pacman" "/mnt/home" "/mnt/srv" "/mnt/var/lib/dockers" "/mnt/var/lib/containers" "/mnt/var/lib/libvirt/images" )
 
+
     for point in "${MTPOINT[@]}"; do
 
         blackbird_progress "umount $point"
@@ -1086,7 +1087,7 @@ function blackbird_storage_bootvol_volume_reco() {
     fi
 
     if [[ ! -d /mnt/boot/loader ]];then
-        mkdir /mnt/boot/kernel
+        mkdir /mnt/boot/loader
     fi
 
     blackbird_done
