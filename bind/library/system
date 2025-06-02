@@ -177,9 +177,9 @@ function blackbird_systems_fakeuser_prep() {
 
 function blackbird_systems_install_prep() {
     
-    blackbird_scope_init "TMPFS Storage Pool"
+    blackbird_scope_init "Prepare Installation Target"
 
-    blackbird_progress "generate partition layout"
+    blackbird_progress "generate partition "
     blackbird_systems_storage_fstab
     blackbird_done
 
@@ -193,8 +193,9 @@ function blackbird_systems_install_prep() {
     blackbird_systems_storage_shmfs
     blackbird_done
 
-
+    blackbird_progress "Create deployment user"
     blackbird_systems_fakeuser_prep
+    blackbird_done
 
     blackbird_scope_done   
 }
