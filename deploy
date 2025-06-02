@@ -2,7 +2,7 @@
 
 ## load library
 export BBPROFILE=$2
-export BPAT="/ordo"
+export BPAT=$(pwd)
 source "$BPAT/bind/library/auxiler";
 
 

@@ -52,105 +52,11 @@ function blackbird_regramf_misc() {
 
 
 
-##
-## PROCESOR MODULE
-function blackbird_system_process_module() {
-
-    if [[ $SYSPROCS == "intel" ]];then
-        blackbird_regpack_main "intel-ucode"
-
-    elif [[ $SYSPROCS == "amd" ]];then
-        blackbird_regpack_main "amd-ucode"
-    fi
-}
-
-
-##
-## GRAPHIC MODULE
-function blackbird_system_graphic_module_intels() {
-
-    if [[ $SYSKERNL == "linux-hardened" ]];then
-
-        echo "display driver is intel at linux-hardened"
-
-    else
-        echo "display driver is intel"
-
-    fi
-}
-
-
-function blackbird_system_graphic_module_optinv() {
-
-    if [[ $SYSKERNL == "linux-hardened" ]];then
-
-        blackbird_regpack_main "linux-hardened-headers"
-        echo "display driver is optimus intel and nvdia at linux-hardened"
-
-    else
-        echo "display driver is optimus"
-    fi
-}
-
-
-function blackbird_system_graphic_module_nvidia() {
-    
-    if [[ $SYSKERNL == "linux-hardened" ]];then
-        echo "display driver is nvidia at linux-hardened"
-
-    else
-        echo "display driver is nvidia"
-
-    fi
-}
-
-
-function blackbird_system_graphic_module_atirad() {
-
-    if [[ $SYSKERNL == "linux-hardened" ]];then
-        echo "display driver is radeon at linux-hardened"
-
-    else
-        echo "display driver is radeon"
-
-    fi
-}
-
-
-function blackbird_system_graphic_module() {
-
-    if [[ $( echo ${SYSDISPL[*]} | grep "intel nvidia" ) ]];then
-
-        blackbird_system_graphic_module_optinv
-
-    elif [[ $( echo ${SYSDISPL[*]} | grep "nvidia" ) ]];then
-
-        blackbird_system_graphic_module_nvidia
-        
-    elif [[ $( echo ${SYSDISPL[*]} | grep "radeon" ) ]];then
-
-        blackbird_system_graphic_module_atirad
-
-    elif [[ $( echo ${SYSDISPL[*]} | grep "intel" ) ]];then
-
-        blackbird_system_graphic_module_intels
-        
-    fi
-}
-
-function blackbird_systems_prepare_main() {
-    blackbird_system_process_module
-    blackbird_system_graphic_module
-}
 
 
 ##
 ## SYSTEM PREPARATION INIT
 
-function blackbird_systems_storage_fstab() {
-    
-    genfstab -U /mnt > /mnt/etc/fstab
-}
 
 
 function blackbird_systems_storage_tmpfs() {

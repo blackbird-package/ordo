@@ -68,7 +68,7 @@ function blackbird_done() {
 
 clear && echo 'load core library ...' && sleep 1
 
-LIBRARY=("unpack" "installs" "system")
+LIBRARY=("sysinfo" "storage" "installs" "system")
 
 for libmods in "${LIBRARY[@]}"; do
 
@@ -81,4 +81,3 @@ for libmods in "${LIBRARY[@]}"; do
         blackbird_error "$libmods is missing or misconfigured"
     fi
 done
-

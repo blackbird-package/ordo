@@ -1,36 +1,8 @@
 #!/bin/bash
 
-# system main package
-MAINPACK=()
-
-# system aurs package
-AURSPACK=()
-
-# system core package
-COREPACK=()
-
-# system flatpack package
-FLATPACK=()
 
 
-function blackbird_regpack_main() {
-    MAINPACK+=($1)
-}
 
-
-function blackbird_regpack_aurs() {
-    AURSPACK+=($1)
-}
-
-
-function blackbird_regpack_core() {
-    COREPACK+=($1)
-}
-
-
-function blackbird_regpack_flat() {
-    FLATPACK+=($1)
-}
 
 
 ##
@@ -134,26 +106,25 @@ function blackbird_package_install_flat() {
 ## MAIN FUNCTION
 
 function blackbird_rebased() {
-    
+    echo ""
     ## install main package
-    blackbird_unpacks_prepare_main
-    blackbird_systems_prepare_main
+    #blackbird_unpacks_prepare_main
+    #blackbird_systems_prepare_main
     #blackbird_storage_prepare_base
     #blackbird_installs_module_base
     #blackbird_systems_install_prep
     #blackbird_installs_module_core
     #blackbird_installs_module_flat
     #blackbird_installs_module_aurs
-    rootc "blackbird_cryptos_prepare_init"
-    rootc "blackbird_desktop_prepare_init"
+    #blackbird_cryptos_prepare_init
+    #blackbird_desktop_prepare_init
 }
-
 
 
 function blackbird_recover() {
     
     ## install main package
-    blackbird_package_install_init
+    #blackbird_package_install_init
     #blackbird_systems_storage_main
     
     

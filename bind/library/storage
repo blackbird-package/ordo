@@ -1,1 +1,421 @@
 #!/bin/bash
+
+
+## 
+## PREPARATION
+
+function blackbird_storage_unmonted() {
+    
+    mountvol=($(lsblk -l -o  mountpoints | grep / | awk '{print $1}' | tr "\n" " "))
+
+    blackbird_progress "clean mountpoint"
+
+    for vol in "${mountvol[@]}"; do
+
+        if [[ ! -z $(/usr/bin/lsblk -o mountpoints | /usr/bin/grep $vol ) ]];then
+            umount -R $vol
+        fi
+    done
+    blackbird_done
+}
+
+
+function blackbird_storage_purelvm2() {
+
+    ## lv remove
+    lvm2vols=($(lsblk -p -l | grep lvm | awk '{print $1}' | tr '\n' ' '))
+
+    for vol in "${lvm2vols[@]}"; do
+        if [[ -z $( echo $vol | grep swap ) ]];then
+            lvremove -y -q $vol > /dev/null
+        else
+            swapoff $vol
+        fi
+    done
+
+
+    ## vg remove
+    lvm2vgs=($(vgs --heading none | awk '{print $1}' | tr "\n" " "))
+
+    blackbird_progress "delete volume group"
+    for datalv in "${lvm2vgs[@]}"; do
+        vgremove -y -q $datalv > /dev/null   
+    done
+    blackbird_done
+
+
+    ## pv remove
+    lvm2pvs=($(vgs --heading none | awk '{print $1}' | tr "\n" " "))
+
+    blackbird_progress "delete volume group"
+    for pvs in "${lvm2pvs[@]}"; do
+        pvremove -y -q $pvs > /dev/null   
+    done
+    blackbird_done
+}
+
+
+function blackbird_storage_tearlvm2() {
+
+    ## lv remove
+    lvm2vols=($(lsblk -p -l | grep lvm | awk '{print $1}' | tr '\n' ' '))
+
+    for vol in "${lvm2vols[@]}"; do
+        if [[ -z $( echo $vol | grep swap ) ]];then
+            lvremove -y -q $vol > /dev/null
+        else
+            swapoff $vol
+        fi
+    done
+
+
+    ## vg remove
+    lvm2vgs=($(vgs --heading none | awk '{print $1}' | tr "\n" " "))
+
+    blackbird_progress "delete volume group"
+    for datalv in "${lvm2vgs[@]}"; do
+        vgremove -y -q $datalv > /dev/null   
+    done
+    blackbird_done
+
+
+    ## pv remove
+    lvm2pvs=($(vgs --heading none | awk '{print $1}' | tr "\n" " "))
+
+    blackbird_progress "delete volume group"
+    for pvs in "${lvm2pvs[@]}"; do
+        pvremove -y -q $pvs > /dev/null   
+    done
+    blackbird_done
+}
+
+
+function blackbird_storage_tearluks() {
+
+    cryptovols=($(lsblk -p -l | grep crypt | awk '{print $1}' | tr '\n' ' '))
+
+    blackbird_progress "detach luks partition"
+
+    for vol in "${cryptovols[@]}"; do
+        cryptsetup luksClose $vol > /dev/null
+    done
+    
+    blackbird_done
+}
+
+
+## 
+## PARTITION
+
+function blackbird_storage_wipepart() {
+
+    ## @param $1 storage drive ex: /dev/nvme0 or /dev/sda
+    
+    blackbird_progress "wipe installation drive"
+    sfdisk --delete $1
+    blackbird_done
+}
+
+
+function blackbird_storage_efispart() {
+    
+    ## @param $1 storage drive ex: /dev/nvme0 or /dev/sda
+    ## @param $2 partition label ex : boot
+    ## @param $3 start sector ex : 1MiB
+    ## @param $4 end sector ex : 321MiB
+
+    blackbird_progress "create boot partition"
+    parted $1 --script mklabel gpt mkpart "$2" fat32 $3 $4
+    blackbird_done
+}
+
+
+function blackbird_storage_ext4part() {
+
+    ## @param $1 storage drive ex: /dev/nvme0 or /dev/sda
+    ## @param $2 partition label ex : keys
+    ## @param $3 start sector ex : 1MiB
+    ## @param $4 end sector ex : 321MiB
+
+    blackbird_progress "create keys partition"
+    parted $1 --script mkpart "$2" ext4 $3 $4
+    blackbird_done
+}
+
+
+function blackbird_storage_fxfspart() {
+    echo "no function"
+}
+
+
+## 
+## CRYPTODRIVES
+
+function blackbird_storage_formlkey() {
+    echo "no function"
+}
+
+
+function blackbird_storage_formlpas() {
+    
+    ## @param $1 luks password
+    ## @param $2 drive path, ex: /dev/nvme0n1p3
+
+    blackbird_progress "creating encrypted volume $2"
+    echo $1 | cryptsetup luksFormat --type luks2 --sector-size 4096 --batch-mode $2;
+    blackbird_done
+}
+
+
+function blackbird_storage_openlkey() {
+    echo "no function"
+}
+
+
+function blackbird_storage_openlpas() {
+
+    ## @param $1 luks password
+    ## @param $2 luks target mount name
+    
+    blackbird_progress "openingencrypted volume $2"
+    echo $1 | cryptsetup luksOpen $2 lvm_proc
+    blackbird_done
+}
+
+
+function blackbird_storage_addlpass() {
+    echo "no function"
+}
+
+
+function blackbird_storage_addlkeys() {
+    echo "no function"
+}
+
+
+## 
+## LVM2DRIVES
+
+function blackbird_storage_lvm2pvmk() {
+
+    ## @param $1 drive path ex: /dev/mapper/lvm_proc
+    
+    blackbird_progress "creating physical volume $1"
+    pvcreate -y -q $1
+    blackbird_done
+}
+
+
+function blackbird_storage_lvm2vgmk() {
+
+    ## @param $1 volume group name, 
+    ## @param $2 drive path ex: /dev/mapper/lvm_proc
+    
+    blackbird_progress "creating volume group $1"
+    vgcreate -y -q $1 $2
+    blackbird_done
+}
+
+
+function blackbird_storage_lvm2lvmk() {
+
+    ## @param $1 partition size, 
+    ## @param $2 volume group name
+    ## @param $3 partition name 
+
+    blackbird_progress "creating logical volume $3"
+
+    if [[ $1 == "all" ]];then
+        yes | lvcreate -y -q -l 100%FREE $2 -n $3
+    else
+        yes | lvcreate -y -q -L $1 $2 -n $3
+    fi
+    
+    blackbird_done
+}
+
+
+## 
+## FORMAT
+
+function blackbird_storage_formext4() {
+
+    ## @param $1 drive path ex: /dev/proc/data
+
+    blackbird_progress "formating $1 partition"
+    yes | mkfs.ext4 -q -b 4096 $1
+    blackbird_done
+}
+
+
+function blackbird_storage_formxfsp() {
+
+    ## @param $1 drive path ex: /dev/proc/data
+
+    blackbird_progress "formating $1 partition"
+    yes | mkfs.xfs -q -fs size=4096 $1
+    blackbird_done
+}
+
+
+function blackbird_storage_formft32() {
+
+    ## @param $1 drive path ex: /dev/nvme0n1p1
+    ## @param $2 partition label
+
+    blackbird_progress "formating $1 partition"
+    yes | mkfs.vfat -F32 -S 4096 -n $2 $1
+    blackbird_done
+}
+
+
+function blackbird_storage_formswap() {
+
+    ## @param $1 drive path ex: /dev/proc/swap
+
+    blackbird_progress "formating swap partition"
+    mkswap $1
+    swapon $1
+    blackbird_done
+}
+
+## 
+## FORMAT
+
+function blackbird_storage_mounting() {
+
+    ## @param $1 mounting directory target 
+    ## @param $2 drive path ex: /dev/proc/root or /dev/sda1
+    ## @param $3 mounting options
+
+    blackbird_progress "mounting partition $1"
+    mkdir -p $1
+    mount -o $3 $2 $1
+    blackbird_done
+}
+
+
+
+## 
+## VALIDATION
+
+
+function blackbird_storage_validate() {
+    echo "no function"
+}
+
+
+
+## 
+## MOUNT DIRECTORY
+
+
+function blackbird_storage_mtdirboot() {
+    mkdir -p /mnt/boot
+}
+
+
+function blackbird_storage_mtdiropts() {
+    mkdir -p /mnt/opt    
+}
+
+
+function blackbird_storage_mtdirubin() {
+    mkdir -p /mnt/usr/bin
+}
+
+
+function blackbird_storage_mtdirvars() {
+    mkdir -p /mnt/var
+}
+
+
+function blackbird_storage_mtdirvtmp() {
+    mkdir -p /mnt/var/tmp
+}
+
+
+function blackbird_storage_mtdirvlog() {
+    mkdir -p /mnt/var/log
+}
+
+
+function blackbird_storage_mtdirvaud() {
+    mkdir -p /mnt/var/log/audit
+}
+
+
+function blackbird_storage_mtdirvpac() {
+    mkdir -p /mnt/var/pacman/cache
+}
+
+
+function blackbird_storage_mtdirhome() {
+    mkdir -p /mnt/home
+}
+
+
+function blackbird_storage_mtdirhost() {
+    mkdir -p /mnt/var/lib/libvirt/images
+}
+
+
+function blackbird_storage_mtdirpods() {
+    mkdir -p /mnt/var/lib/containers
+}
+
+
+function blackbird_storage_mtdirsrvc() {
+    mkdir -p /mnt/srv
+}
+
+
+## 
+## SYSTEM DIRECTORY
+
+
+function blackbird_storage_msdiropts() {
+    mkdir -p /mnt/opt/flat /mnt/opt/apps /mnt/opt/rbin /mnt/opt/cache 
+}
+
+
+function blackbird_storage_msdirboot() {
+    mkdir -p /mnt/boot/kernel /mnt/boot/loader /mnt/boot/efi /mnt/boot/efi/linux /mnt/boot/efi/systemd /mnt/boot/efi/boot /mnt/boot/efi/recovery
+}
+
+
+function blackbird_storage_msdirsrvc() {
+    mkdir -p /mnt/srv/http /mnt/srv/http/personal /mnt/srv/http/internal /mnt/srv/http/community /mnt/srv/http/company /mnt/srv/http/public 
+}
+
+
+function blackbird_storage_msdirhost() {
+    mkdir -p /mnt/lib/libvirt/images/publish /mnt/lib/libvirt/images/testing
+}
+
+
+##
+## GENERATE TMPFS
+
+
+function blackbird_storage_tmporerfs() {
+    
+    ## @param $1 tmpfs size
+    ## @param $2 tmpfs mount ex: /tmp or /dev/shm
+
+    if [[ ! -z $1 ]] && [[ ! -z $2 ]];then
+        echo "tmpfs     $2        tmpfs   defaults,rw,nosuid,nodev,noexec,relatime,size=$1    0 0" >> /mnt/etc/fstab
+    fi
+}
+
+
+##
+## GENERATE FSTAB
+
+
+function blackbird_storage_genfstabs() {
+    
+    genfstab -U /mnt > /mnt/etc/fstab
+}
+
+

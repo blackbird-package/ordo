@@ -8,13 +8,14 @@
 
 
 ## load library
-BPAT=/ordo
+BPAT=$(pwd)
 source "$BPAT/bind/library/auxiler";
 
 
 function blackbird_rebased() {
 
-    blackbird_auxiler_prepare_libs
+    #blackbird_auxiler_prepare_libs
    
 }
+
 

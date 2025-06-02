@@ -1,0 +1,173 @@
+#!/bin/bash
+
+# system kernel
+SYSKERNL=""
+
+# system graphic
+SYSDISPL=()
+
+# system audio 
+SYSSOUND=""
+
+# package main 
+MAINPACK=()
+
+# package aurs 
+AURSPACK=()
+
+# package core 
+COREPACK=()
+
+# package flat 
+FLATPACK=()
+
+
+
+##
+## SYSINFO KERN
+
+
+##
+## SYSINFO PACK
+
+function blackbird_register_main() {
+    MAINPACK+=($1)
+}
+
+
+function blackbird_register_aurs() {
+    AURSPACK+=($1)
+}
+
+
+function blackbird_register_core() {
+    COREPACK+=($1)
+}
+
+
+function blackbird_register_flat() {
+    FLATPACK+=($1)
+}
+
+
+##
+## SYSINFO USER
+
+
+
+##
+## SYSINFO DATA
+
+
+function blackbird_sysinfo_cpudata() {
+
+    if [[ ! -z $( lscpu | grep "Intel" )  ]];then
+
+        SYSPROCS="intel" && blackbird_register_main "intel-ucode"
+
+    elif [[ ! -z $( lscpu | grep "AMD" ) ]];then
+    
+        SYSPROCS="amd" && blackbird_register_main "amd-ucode"
+    fi
+}
+
+
+function blackbird_sysinfo_vgadata() {
+
+    OPTIMU=$( lspci | grep "VGA" | grep grep -P '^(?=.*Intel)(?=.*NVIDIA)' )
+    NVIDIA=$( lspci | grep "VGA" | grep "NVIDIA" )
+    RADEON=$( lspci | grep "VGA" | grep grep -P '^(?=.*AMD)(?=.*ATI)' )
+    INTELS=$( lspci | grep "VGA" | grep "Intel" )
+
+
+    if [[ ! -z $OPTIMU ]];then
+        
+        source "$BPAT/bind/library/display/optimus"
+
+    elif [[ ! -z $NVIDIA ]];then
+
+        source "$BPAT/bind/library/display/nvidia"
+    
+    elif [[ ! -z $RADEON ]];then
+
+        source "$BPAT/bind/library/display/radeon"
+
+    elif [[ ! -z $INTELS ]];then
+
+        source "$BPAT/bind/library/display/intel"
+    fi
+}
+
+
+function blackbird_sysinfo_presets() {
+
+    envidata=("devices" "network" "storage" "protocol")
+
+    for path in "${envidata[@]}"; do
+
+        blackbird_progress "unpack $path data"
+
+        if [[ -e  "$envipath/$path" ]];then
+            export $( xargs < "$envipath/$path") && blackbird_done
+        else
+            blackbird_error "profile $path files not found"
+        fi
+    done
+}
+
+
+function blackbird_sysinfo_profile() {
+    
+    protocol=("kernel" "crypto" "system" "storage" "network" "user" "mitigation" "security" "tunning" "desktop" "develop" "docker" "kvm" "podman" "utility")
+    protodir="$BPAT/bind/model"
+
+    for proto in "${protocol[@]}"; do
+
+        blackbird_progress "unpack $proto protocol"
+        level=$(printenv $proto"_protocol");
+
+        if [[ ! -z $level ]] && [[ -e "$protodir/profile/$proto/$level" ]];then
+
+            source "$protodir/profile/$proto/$level" && blackbird_done
+        else
+            blackbird_info "$proto protocol not implemented for this profile"
+        fi
+    done
+}
+
+
+function blackbird_sysinfo_defined() {
+
+    protocol=("kernel" "crypto" "system" "storage" "network" "user" "mitigation" "security" "tunning" "desktop" "develop" "docker" "kvm" "podman" "utility")
+    protodir="$BPAT/bind/model"
+
+    for proto in "${protocol[@]}"; do
+
+        blackbird_progress "unpack $proto protocol"
+        $level=$(printenv $proto"_protocol");
+
+        if [[ ! -z $level ]] && [[ -e "$protodir/define/$proto/$level" ]];then
+ 
+            source "$protodir/define/$proto/$level" && blackbird_done
+        else
+            blackbird_info "$proto protocol not implemented for this profile"
+        fi
+    done
+}
+
+
+
+##
+## SYSINFO MAIN 
+function blackbird_sysinfo_main() {
+
+    blackbird_sysinfo_presets
+
+    blackbird_sysinfo_profile
+
+    blackbird_sysinfo_defined
+
+    blackbird_sysinfo_cpudata
+
+    blackbird_sysinfo_vgadata
+}
