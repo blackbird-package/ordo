@@ -81,7 +81,7 @@ function blackbird_storage_prepare_lvdisk_base() {
         
         if [[ ! -z $(/usr/bin/lvs | /usr/bin/grep $datalv ) ]];then
             
-            lvremove lvremove -y -q /dev/data/$datalv > /dev/null
+            lvremove -y -q /dev/data/$datalv > /dev/null
         fi
         blackbird_done
     done
