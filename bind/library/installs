@@ -48,7 +48,7 @@ function rootc() {
 
 
 ## 
-## INSTALLATION MODULE
+### MODULE
 
 function blackbird_package_install_module_yays() {
     userc "git clone https://aur.archlinux.org/yay /tmp/yay"
@@ -80,9 +80,6 @@ function blackbird_package_install_module_flat() {
 }
 
 
-## 
-## MAIN FUNCTIONS
-
 function blackbird_package_install_init() {
 
     blackbird_scope_init "Install Base Packages"
@@ -93,7 +90,6 @@ function blackbird_package_install_init() {
 
 
 function blackbird_package_install_aurs() {
-
     blackbird_scope_init "Install Community Packages"
     blackbird_package_install_module_yays
     blackbird_package_install_module_aurs
@@ -113,4 +109,60 @@ function blackbird_package_install_flat() {
     blackbird_scope_init "Install Flatpak Packages"
     blackbird_package_install_module_flat
     blackbird_scope_done
+}
+
+
+
+
+
+##
+## MAIN FUNCTION
+
+function blackbird_rebase() {
+    ## install main package
+    blackbird_unpacks_prepare_main
+    blackbird_systems_prepare_main
+    blackbird_storage_prepare_base
+    blackbird_package_install_init
+    #blackbird_systems_storage_main
+}
+
+
+
+function blackbird_recovery() {
+    
+    ## install main package
+    blackbird_package_install_init
+    #blackbird_systems_storage_main
+    
+    
+    ## install basic configuration
+    #blackbird_syscore_prepare_init
+
+
+    ## create prepared user
+    #blackbird_systems_install_conf
+
+    ## install extended package
+    #blackbird_package_install_aurs
+    #blackbird_package_install_core
+    #blackbird_package_install_flat
+
+
+    ## configure protocol
+    #blackbird_cryptos_prepare_init
+    #blackbird_desktop_prepare_init
+    #blackbird_develop_prepare_init
+    #blackbird_kernels_prepare_reco
+    #blackbird_virtman_prepare_init
+    #blackbird_prevent_prepare_init
+    #blackbird_network_prepare_init
+    #blackbird_podmans_prepare_init
+    #blackbird_secured_prepare_init
+    #lackbird_tunning_prepare_init
+    #blackbird_usercfg_prepare_init
+    #blackbird_utility_prepare_init
+
+    ## remove prepard user
+    blackbird_systems_prepare_done
 }
