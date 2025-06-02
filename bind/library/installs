@@ -46,7 +46,7 @@ function rootc() {
 }
 
 function rootf() {
-    arch-chroot /mnt -c "$1"
+    arch-chroot /mnt /bin/basjh "$1"
 }
 
 
@@ -70,10 +70,12 @@ function blackbird_installs_module_core() {
     blackbird_scope_init "Install Core Packages"
     for coreapp in "${COREPACK[@]}"; do
 
-        echo $coreapp
-        echo $(pwd)
-        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/$coreapp"
-        rootc "/bin/bash /opt/$coreapp/make"
+        if [[ ! -d  /mnt/opt/cache ]];then
+            mkdir /mnt/opt/cache
+        fi
+
+        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
+        rootc "/bin/bash /opt/cache/$coreapp/make"
     done
     blackbird_scope_done
 }
