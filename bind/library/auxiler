@@ -70,16 +70,16 @@ function blackbird_auxiler_prepare_libs() {
     
     LIBRARY=("unpack" "installs" "system")
 
-    for module in "${LIBRARY[@]}"; do
+    for libmods in "${LIBRARY[@]}"; do
 
-        if [[ -e "$BPAT/bind/library/$module" ]];then
+        if [[ -e "$BPAT/bind/library/$libmods" ]];then
 
-            source "$BPAT/bind/library/$module"
-            echo "$module loaded"
+            source "$BPAT/bind/library/$libmods"
+            echo "$libmods loaded"
             sleep 5
         else
 
-            blackbird_error "$module is missing or misconfigured"
+            blackbird_error "$libmods is missing or misconfigured"
         fi
         
     done
