@@ -64,11 +64,16 @@ function blackbird_installs_module_yays() {
 
 function blackbird_installs_module_aurs() {
 
+    blackbird_scope_init "Install Community Packages"
+
     if [[ ! -d /mnt/home/installman/yay ]];then
         userc "git clone https://aur.archlinux.org/yay /home/installman/yay"
         userc "makepkg -sric --dir /home/installman/yay --noconfirm"
     fi
+
     userc "yay -S ${AURSPACK[*]} --noconfirm"
+
+    blackbird_scope_done
 }
 
 
