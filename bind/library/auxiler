@@ -66,7 +66,7 @@ function blackbird_done() {
 ##
 ## MAIN FUNCTIONS
 
-LIBRARY=("installs" "unpack" "system" "")
+LIBRARY=("unpack"  "installs" "system" )
 
 for module in "${LIBRARY[@]}"; do
     source $BPAT$"/bind/library/"$module
