@@ -20,6 +20,7 @@ function blackbird_rebased() {
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
     blackbird_storage_prepare_base
-    blackbird_systems_install_base
+    blackbird_package_install_init
+
 }
 
