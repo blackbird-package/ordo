@@ -64,13 +64,17 @@ function blackbird_installs_module_aurs() {
 function blackbird_installs_module_core() {
 
     blackbird_scope_init "Install Core Packages"
+
+    if [[ ! -d  /mnt/opt/cache ]];then
+        mkdir /mnt/opt/cache
+    else
+        yes | rm -fr /mnt/opt/cache/*
+    fi
+
+
     for coreapp in "${COREPACK[@]}"; do
 
-        if [[ ! -d  /mnt/opt/cache ]];then
-            mkdir /mnt/opt/cache
-        else
-            yes | rm -fr /mnt/opt/cache/*
-        fi
+        
 
         rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
         rootc "chmod +x /opt/cache/$coreapp"
