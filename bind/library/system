@@ -178,12 +178,12 @@ function blackbird_systems_install_reco() {
 
 
     ## create prepared user
-    blackbird_systems_install_conf
+    #blackbird_systems_install_conf
 
     ## install extended package
-    blackbird_package_install_aurs
-    blackbird_package_install_core
-    blackbird_package_install_flat
+    #blackbird_package_install_aurs
+    #blackbird_package_install_core
+    #blackbird_package_install_flat
 
 
     ## configure protocol
