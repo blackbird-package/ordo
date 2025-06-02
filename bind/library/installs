@@ -69,7 +69,7 @@ function blackbird_installs_module_aurs() {
         userc "makepkg -sric --dir /home/installman/yay --noconfirm"
     fi
     
-    userc "yay -S ${AURSPACK[*]} --noconfirm"
+    userc "yay -Sri ${AURSPACK[*]} --noconfirm"
 }
 
 
