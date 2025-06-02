@@ -66,16 +66,22 @@ function blackbird_done() {
 ##
 ## MAIN FUNCTIONS
 
-LIBRARY=("unpack" "installs" "system")
-
-for module in "${LIBRARY[@]}"; do
-
-    if [[ -e "$BPAT/bind/library/$module" ]];then
-
-        source "$BPAT/bind/library/$module"
-    else
+function blackbird_auxiler_prepare_libs() {
     
-        blackbird_error "$module is missing or misconfigured"
-    fi
-    
-done
+    LIBRARY=("unpack" "installs" "system")
+
+    for module in "${LIBRARY[@]}"; do
+
+        if [[ -e "$BPAT/bind/library/$module" ]];then
+
+            source "$BPAT/bind/library/$module"
+            echo "$module loaded"
+            sleep 1
+        else
+
+            blackbird_error "$module is missing or misconfigured"
+        fi
+        
+    done
+}
+

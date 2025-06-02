@@ -17,6 +17,7 @@ function blackbird_rebased() {
     clear
     echo 'starting fressh build procedure ...'
     sleep 1
+    blackbird_auxiler_prepare_libs
     blackbird_unpacks_prepare_main
     blackbird_systems_prepare_main
     blackbird_storage_prepare_base
