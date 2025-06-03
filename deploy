@@ -2,21 +2,19 @@
 
 ## load library
 export profiler=$2
-export ORDOPATH="$(pwd)/ordo"
-
-## load library
-source "$ORDOPATH/library/auxiler";
+export ordopath="$(pwd)"
+source "$ordopath/library/auxiler";
 
 
 if [[ $1 == "rebase" ]];then
-    blackbird_rebased
+    blackbird_rebased $2
 fi
 
 if [[ $1 == "install" ]];then
-    blackbird_install
+    blackbird_install $2
 fi
 
 
 if [[ $1 == "reset" ]];then
-    blackbird_recover
+    blackbird_recover $2
 fi

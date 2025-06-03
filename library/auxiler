@@ -1,0 +1,242 @@
+#!/bin/bash
+
+
+
+##
+## MESSAGE AND BANNER
+
+function blackbird_banner() {
+    /usr/bin/clear
+    echo '----------------------------------------------------'
+    echo ' BLACKBIRD SYSTEM FRAMEWORK'
+    echo ' copyright@2025 Lektor Media Utama'
+    echo '----------------------------------------------------'
+}
+
+
+function blackbird_scope_init() {
+    blackbird_banner
+    echo ' '$1
+    echo '----------------------------------------------------'
+}
+
+
+function blackbird_scope_done() {
+    PROGSIDS=1
+    /usr/bin/sleep 2s
+}
+
+
+function blackbird_progress() {
+    echo "        |"
+    echo "  step ($PROGID) $1"
+    PROGID=$(( $PROGID + 1 ))
+    /usr/bin/sleep 1s
+}
+
+
+function blackbird_warn() {
+    echo "        |----> [ warning ] $1"
+    /usr/bin/sleep 1s
+}
+
+
+function blackbird_info() {
+    echo "        |----> [ info ] $1"
+    /usr/bin/sleep 1s
+}
+
+
+function blackbird_error() {
+    echo "        |----> [ error ] $1"
+    /usr/bin/sleep 1s
+    exit 1
+}
+
+
+function blackbird_done() {
+    echo "        |----> [ done ]"
+}
+
+
+
+##
+## USER SWITCH WRAPPER
+
+function userc() {
+    arch-chroot /mnt /bin/bash -c "sudo -H -u installman /bin/bash -c '$1'" 
+}
+
+
+function rootc() {
+    arch-chroot /mnt /bin/bash -c "$1"
+}
+
+
+
+##
+## REGSITER APPLICATION
+
+function blackbird_regapp_base() {
+    package_base+=($1)
+}
+
+
+function blackbird_regapp_aurs() {
+    package_aurs+=($1)
+}
+
+
+function blackbird_regapp_core() {
+    package_core+=($1)
+}
+
+
+function blackbird_regapp_flat() {
+    package_flat+=($1)
+}
+
+
+
+##
+## REGISTER INITRAMFS
+
+function blackbird_initram_mods() {
+    initram_modul+=($1)
+}
+
+
+function blackbird_initram_bins() {
+    initram_biner+=($1)
+}
+
+
+function blackbird_initram_file() {
+    initram_files+=($1)
+}
+
+
+function blackbird_initram_hook() {
+    initram_hooks+=($1)
+}
+
+
+##
+## REGISTER KERNEL PARAMETER
+
+function blackbird_cmdline_boot() {
+    kernel_boot+=($1)
+}
+
+
+function blackbird_cmdline_mods() {
+    kernel_mods+=($1)
+}
+
+
+function blackbird_cmdline_secs() {
+    kernel_secs+=($1)
+}
+
+
+function blackbird_cmdline_perf() {
+    kernel_perf+=($1)
+}
+
+
+function blackbird_cmdline_nets() {
+    kernel_nets+=($1)
+}
+
+
+function blackbird_cmdline_misc() {
+    kernel_misc+=($1)
+}
+
+
+
+##
+## INSTALL APPLLICATION
+function blackbird_install_base() {
+
+    blackbird_scope_init "Install Base Packages"
+    pacstrap /mnt ${package_base[*]} --noconfirm
+    blackbird_scope_done
+    sleep 5
+}
+
+
+function blackbird_install_aurs() {
+
+    blackbird_scope_init "Install Community Packages"
+    blackbird_progress "Download metadata"
+
+    if [[ ! -d /mnt/home/installman/yay ]];then
+        userc "git clone https://aur.archlinux.org/yay /home/installman/yay"
+        userc "makepkg -sric --dir /home/installman/yay --noconfirm"
+    fi
+
+    userc "yay -S ${package_aurs[*]} --noconfirm"
+
+    blackbird_scope_done
+}
+
+
+function blackbird_install_core() {
+
+    blackbird_scope_init "Install Core Packages"
+
+    if [[ ! -d  /mnt/opt/cache ]];then
+        mkdir /mnt/opt/cache
+    else
+        yes | rm -fr /mnt/opt/cache/*
+    fi
+
+    for coreapp in "${package_core[@]}"; do
+
+        blackbird_progress "install $coreapp"
+        rootc "git clone https://github.com/linux-blackbird/$coreapp /opt/cache/$coreapp"
+        rootc "chmod +x /opt/cache/$coreapp"
+        rootc "/bin/bash /opt/cache/$coreapp/make"
+        blackbird_done
+    done
+
+    blackbird_scope_done
+}
+
+
+function blackbird_install_flat() {
+    
+    blackbird_scope_init "Install Flatpak Packages"
+
+    for flatapp in "${package_flat[@]}"; do
+        blackbird_progress "install $flatapp"
+        rootc "/usr/bin/flatpak install --system --noninteractive $flatapp"
+        blackbird_done
+    done
+
+    blackbird_scope_done
+}
+
+
+
+
+##
+## MAIN FUNCTIONS
+
+
+clear && echo 'load core library ...' && sleep 1
+
+## load library 
+
+LIBRARY=("sysinfo" "storage" "installs" "system")
+
+for libmods in "${LIBRARY[@]}"; do
+
+    if [[ -e "$LIBDIR/$libmods" ]];then
+
+        source "$LIBDIR/$libmods"
+    else
+        blackbird_error "$libmods is missing or misconfigured"
+    fi
+done

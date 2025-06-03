@@ -1,0 +1,218 @@
+#!/bin/bash
+
+
+##
+## SYSINFO PATH VARS
+
+libdir="$ordopath/library"
+usrdir="$ordopath/profile"
+defdir="$ordopath/define"
+moddir="$ordopath/model"
+
+##
+## SYSINFO LIBRARY
+
+## timeline ticker
+progid=1
+
+
+##
+## SYSINFO SYSTEM VARS
+
+# system kernel
+system_kernel=""
+
+# system profil 
+system_profil=""
+
+# system graphic
+system_graphic=""
+
+# system procesor 
+system_procie=""
+
+# system audio 
+system_audio=""
+
+
+
+##
+## SYSINFO USERS VARS
+
+## netadmin
+user_netmin=()
+
+## sysadmin
+user_sysmin=()
+
+## user normal
+user_normal=()
+
+
+
+##
+## SYSINFO PACKAGE VARS
+
+# package main 
+package_base=()
+
+# package aurs 
+package_aurs=()
+
+# package core 
+package_core=()
+
+# package flat 
+package_flat=()
+
+
+
+##
+## SYSINFO PACKAGE VARS
+
+# kernel hook
+initram_hooks=()
+
+# kernel file
+initram_files=()
+
+# kernel mods
+initram_modul=()
+
+# kernel bins
+initram_biner=()
+
+
+
+##
+## SYSINFO KERNEL VARS
+
+# kernel param boot
+kernel_boot=()
+
+# kernel param boot
+kernel_mods=()
+
+# kernel param boot
+kernel_secs=()
+
+# kernel param boot
+kernel_perf=()
+
+# kernel param boot
+kernel_nets=()
+
+# kernel param boot
+kernel_misc=()
+
+
+
+##
+## SYSINFO DATA VARS
+
+
+function blackbird_sysinfo_cpudata() {
+
+    if [[ ! -z $( lscpu | grep "Intel" )  ]];then
+
+        system_procie="intel" && blackbird_register_packmain "intel-ucode"
+
+    elif [[ ! -z $( lscpu | grep "AMD" ) ]];then
+    
+        system_procie="amd" && blackbird_register_packmain "amd-ucode"
+    fi
+}
+
+
+function blackbird_sysinfo_vgadata() {
+
+    NVIDIA=$( lspci | grep "VGA" | grep "NVIDIA" )
+    RADEON=$( lspci | grep "VGA" | grep "ATI" )
+    INTELS=$( lspci | grep "VGA" | grep "Intel" )
+
+    if [[ ! -z $OPTIMU ]] && [[ ! -z $INTELS ]];then
+
+        system_graphic="nvidia-optimus"
+  
+    elif [[ ! -z $NVIDIA ]];then
+
+        system_graphic="nvidia"
+    
+    elif [[ ! -z $RADEON ]];then
+
+        system_graphic="radeon"
+
+    elif [[ ! -z $INTELS ]];then
+
+        system_graphic="intel"
+
+    fi
+}
+
+
+function blackbird_sysinfo_envdata() {
+
+    envidata=("devices" "network" "storage" "protocol")
+
+    if [[ -d "$usrdir/$profiler" ]];then
+        
+        path="$usrdir/$profiler"
+
+    elif [[ -d "$defdir/$profiler" ]];then
+
+        path="$defdir/$profiler"
+    else
+        blackbird_error "Installation profile not available"
+    fi
+
+    for file in "${envidata[@]}"; do
+
+        blackbird_progress "unpack $file data"
+
+        if [[ -e "$path/$file"  ]];then
+            export $( xargs < "$path/$file") && blackbird_done
+        else
+            blackbird_error "$file profile not found"
+        fi
+    done
+}
+
+
+function blackbird_sysinfo_moldata() {
+
+    protocol=("systems" "modular" "desktop" "security" )
+
+    rm -fr $MODDIR/*
+
+    for kindof in "${protocol[@]}"; do
+
+        blackbird_progress "unpack $kindof protocol"
+        level=$(printenv $kindof"_protocol");
+        repos="https://github.com/blackbird-protocol/$kindof-protocol/raw/refs/heads/main/src/$kindof-protocol-$level.tar.gz"
+        
+        if [[ $(curl --head --silent --fail $repos ) ]] 2> /dev/null;then
+
+            packs="$MODDIR/$kindof"
+            curl -LJo "$packs.tar.gz" $repos && mkdir $packs && tar xf "$packs.tar.gz" -C $packs && rm "$packs.tar.gz"
+ 
+        else
+            echo "This page does not exist."
+        fi
+    done
+}
+
+
+
+##
+## SYSINFO MAIN 
+function blackbird_sysinfo_main() {
+
+    blackbird_sysinfo_cpudata
+
+    blackbird_sysinfo_vgadata
+
+    blackbird_sysinfo_envdata
+
+    blackbird_sysinfo_moldata
+
+}

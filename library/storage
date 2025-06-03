@@ -281,6 +281,7 @@ function blackbird_storage_formswap() {
     blackbird_done
 }
 
+
 ## 
 ## FORMAT
 
@@ -301,7 +302,6 @@ function blackbird_storage_mounting() {
 ## 
 ## VALIDATION
 
-
 function blackbird_storage_validate() {
     echo "no function"
 }
@@ -310,7 +310,6 @@ function blackbird_storage_validate() {
 
 ## 
 ## MOUNT DIRECTORY
-
 
 function blackbird_storage_mtdirboot() {
     mkdir -p /mnt/boot
@@ -375,7 +374,6 @@ function blackbird_storage_mtdirsrvc() {
 ## 
 ## SYSTEM DIRECTORY
 
-
 function blackbird_storage_msdiropts() {
     mkdir -p /mnt/opt/flat /mnt/opt/apps /mnt/opt/rbin /mnt/opt/cache 
 }
@@ -399,7 +397,6 @@ function blackbird_storage_msdirhost() {
 ##
 ## GENERATE TMPFS
 
-
 function blackbird_storage_tmporerfs() {
     
     ## @param $1 tmpfs size
@@ -413,7 +410,6 @@ function blackbird_storage_tmporerfs() {
 
 ##
 ## GENERATE FSTAB
-
 
 function blackbird_storage_genfstabs() {
     
