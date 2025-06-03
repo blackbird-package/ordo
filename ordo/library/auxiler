@@ -68,16 +68,31 @@ function blackbird_done() {
 
 clear && echo 'load core library ...' && sleep 1
 
+## load library 
+
 LIBRARY=("sysinfo" "storage" "installs" "system")
 
 for libmods in "${LIBRARY[@]}"; do
 
-    if [[ -e "$ORDOPATH/bind/library/$libmods" ]];then
-        source "$ORDOPATH/bind/library/$libmods"
-        echo "$libmods loaded"
-        sleep 1
-    else
+    if [[ -e "$ORDOPATH/ordo/library/$libmods" ]];then
 
+        source "$ORDOPATH/ordo/library/$libmods"
+    else
         blackbird_error "$libmods is missing or misconfigured"
+    fi
+done
+
+
+## load sources 
+
+SOURCES=("rebase" "making" "recover")
+
+for libsrcs in "${SOURCES[@]}"; do
+
+    if [[ -e "$ORDOPATH/ordo/library/$libsrcs" ]];then
+
+        source "$ORDOPATH/ordo/library/$libsrcs"
+    else
+        blackbird_error "$libsrcs is missing or misconfigured"
     fi
 done

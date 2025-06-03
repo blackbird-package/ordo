@@ -16,17 +16,5 @@ source "$BPAT/bind/library/auxiler";
 
 
 
-function blackbird_rebased_prepare() {
-    blackbird_storage_unmonted
-    blackbird_storage_purelvm2
-    blackbird_storage_tearluks
-}
-
-
-function blackbird_rebased() {
-
-    blackbird_rebased_prepare
-   
-}
 
 
