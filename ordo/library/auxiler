@@ -90,9 +90,9 @@ SOURCES=("rebase" "making" "recover")
 
 for libsrcs in "${SOURCES[@]}"; do
 
-    if [[ -e "$ORDOPATH/ordo/library/$libsrcs" ]];then
+    if [[ -e "$ORDOPATH/ordo/source/$libsrcs" ]];then
 
-        source "$ORDOPATH/ordo/library/$libsrcs"
+        source "$ORDOPATH/ordo/source/$libsrcs"
     else
         blackbird_error "$libsrcs is missing or misconfigured"
     fi
