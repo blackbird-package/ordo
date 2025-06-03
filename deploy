@@ -3,7 +3,7 @@
 ## load library
 export BBPROFILE=$2
 export BPAT=$(pwd)
-source "$BPAT/bind/library/auxiler";
+source "$BPAT/ordo/bind/library/auxiler";
 
 
 if [[ $1 == "rebase" ]];then
