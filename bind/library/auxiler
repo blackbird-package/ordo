@@ -72,8 +72,8 @@ LIBRARY=("sysinfo" "storage" "installs" "system")
 
 for libmods in "${LIBRARY[@]}"; do
 
-    if [[ -e "$BPAT/bind/library/$libmods" ]];then
-        source "$BPAT/bind/library/$libmods"
+    if [[ -e "$ORDOPATH/bind/library/$libmods" ]];then
+        source "$ORDOPATH/bind/library/$libmods"
         echo "$libmods loaded"
         sleep 1
     else
