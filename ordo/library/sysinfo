@@ -156,6 +156,11 @@ function blackbird_sysinfo_defined() {
 }
 
 
+function blackbird_sysinfo_protocol() {
+    
+}
+
+
 
 ##
 ## SYSINFO MAIN 
