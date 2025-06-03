@@ -5,7 +5,7 @@ export PROFILER=$2
 export ORDOPATH="$(pwd)/ordo/"
 
 ## load library
-source "$ORDOPATH/library/auxiler";
+source "$ORDOPATH/ordo/library/auxiler";
 
 
 if [[ $1 == "rebase" ]];then
