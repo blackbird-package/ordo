@@ -14,8 +14,6 @@ function blackbird_storage_unmonted() {
 
         target=$(/usr/bin/lsblk -o mountpoints | /usr/bin/grep $vol )
 
-        echo $target
-
         if [[ ! -z $target ]] && [[ -z $( echo $target | grep "archiso" ) ]] ;then
             umount -R $vol
         fi
