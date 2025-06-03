@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ## load library
-export PROFILER=$2
-export ORDOPATH="$(pwd)/ordo/"
+export profiler=$2
+export ORDOPATH="$(pwd)/ordo"
 
 ## load library
-source "$ORDOPATH/ordo/library/auxiler";
+source "$ORDOPATH/library/auxiler";
 
 
 if [[ $1 == "rebase" ]];then

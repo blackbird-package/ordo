@@ -75,9 +75,9 @@ LIBRARY=("sysinfo" "storage" "installs" "system")
 
 for libmods in "${LIBRARY[@]}"; do
 
-    if [[ -e "$ORDOPATH/ordo/library/$libmods" ]];then
+    if [[ -e "$ORDOPATH/library/$libmods" ]];then
 
-        source "$ORDOPATH/ordo/library/$libmods"
+        source "$ORDOPATH/library/$libmods"
     else
         blackbird_error "$libmods is missing or misconfigured"
     fi
@@ -90,9 +90,9 @@ SOURCES=("rebase" "making" "recover")
 
 for libsrcs in "${SOURCES[@]}"; do
 
-    if [[ -e "$ORDOPATH/ordo/source/$libsrcs" ]];then
+    if [[ -e "$ORDOPATH/source/$libsrcs" ]];then
 
-        source "$ORDOPATH/ordo/source/$libsrcs"
+        source "$ORDOPATH/source/$libsrcs"
     else
         blackbird_error "$libsrcs is missing or misconfigured"
     fi

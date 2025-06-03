@@ -9,7 +9,7 @@ function blackbird_rebased_prepare() {
 
 
 function blackbird_rebased() {
-
-    blackbird_rebased_prepare
+    blackbird_sysinfo_main
+    #blackbird_rebased_prepare
    
 }
